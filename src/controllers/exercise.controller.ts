@@ -1,29 +1,17 @@
 import type { Request, Response, NextFunction } from 'express'
 import z from 'zod'
+import exerciseType from '../validation/validateZod.ts'
 
-const muscleGroupZod = z.object({
-  primary: z.array(z.string()),
-  secondary: z.array(z.string()).optional()
-})
+const exerciseValidation = z.discriminatedUnion("category", [
+  exerciseType.strengthExercise,
+  exerciseType.isoStrengthExercise,
+  exerciseType.cardioExercise,
+  exerciseType.plyoExercise
+])
 
-const exerciseValid = z.object({
-  id: z.string(),
-  name: z.string(),
-  muscleGroup: z.object(muscleGroupZod),
-  category: z.string(),
-  movementPattern: z.string(),
-  equipment: z.array(z.string()).nullable(),
-  mechanics: z.string(),
-  laterality: z.string(),
-  defaultSets: z.number(),
-  repRange: z.object(z.number()),
-  restSeconds: z.number(),
-  instructions: z.array(z.string()),
-  tips: z.string(),
-  videoUrl: z.string().nullable()
-})
+type Exercise = z.infer<typeof exerciseValidation>
 
-const exercises = [
+const exercises: Exercise[] = [
   {
     id: "ex_001",
     name: "Barbell Back Squat",
@@ -200,7 +188,7 @@ const exercises = [
       primary: ["core", "transverse abdominis"],
       secondary: ["shoulders", "glutes", "hip flexors"],
     },
-    category: "strength",
+    category: "isometric strength",
     movementPattern: "isometric",
     equipment: [],
     mechanics: "isolation",
@@ -268,25 +256,55 @@ const exercises = [
 ];
 
 const getExercises = (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send({ exercises })
+  res.status(200).send({ exercises })
 }
 
 const createExercise = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
+  if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
 
-    // implement zod validation
+  const { id, name } = req.body
 
-    // push zodded exercise to exericse array
+  const idExists = exercises.some(exercise => exercise.id === id)
+  const nameExists = exercises.some(exercise => exercise.name === name)
 
-    // return the newly created exercise, with a success message
+  if (idExists || nameExists) res.status(409).json({ message: "ID or name of exercise already exists" })
+
+  const newExercise = exerciseValidation.parse(req.body)
+
+  exercises.push(newExercise)
+
+  res.status(200).send({ exercise: newExercise, message: "New exercise added successfully" })
 }
 
 const updateExercise = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
 
+  const passedId = req.params.id
+  const { name } = req.body
+  const exerciseId = exercises.findIndex(exercise => exercise.id === passedId)
+
+  if (exerciseId === -1) res.status(404).json({ message: `Didn't find exercise with ID ${passedId}`})
+
+  if (name === exercises[exerciseId]?.name) res.status(409).json({ message: "Exercise with this name already exists"})
+
+  exercises[exerciseId] = {
+    ...exercises[exerciseId],
+    ...req.body
+  }
+
+  res.status(200).send({ exercise: exercises[exerciseId], message: "Exercise successfully updated" })
 }
 
 const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
+  const passedId = req.params.id
 
+  const exerciseId = exercises.findIndex(exercise => exercise.id === passedId)
+
+  if (exerciseId === -1) res.status(404).json({ message: `Didn't find exercise with ID ${passedId}`})
+
+  const deletedExercise = exercises.splice(exerciseId, 1)
+
+  res.status(200).send({ exercise: deletedExercise, message: "Exercise deleted successfully"})
 }
 
 export default {

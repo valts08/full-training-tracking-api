@@ -65,9 +65,9 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
 
     if (userToDelete === -1) res.status(404).json({ message: "User Id not found" })
 
-    users.splice(userToDelete, 1)
+    const deletedUser = users.splice(userToDelete, 1)
 
-    res.status(200).send({ user: users[userToDelete], message: "User successfully deleted" })
+    res.status(200).send({ user: deletedUser, message: "User successfully deleted" })
 }
 
 export default {
