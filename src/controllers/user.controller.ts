@@ -1,6 +1,11 @@
-import type { Response, Request, NextFunction } from 'express' 
+import type { Response, Request, NextFunction } from 'express'
+import z from 'zod'
+import User from '../validation/validateUser.ts'
 
-const users = [
+type UserCreateType = z.infer<typeof User.createUser>
+type UserUpdateType = z.infer<typeof User.updateUser>
+
+const users: UserCreateType[] | UserUpdateType[] = [
     {
         id: '1',
         username: 'a'
@@ -28,14 +33,17 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.body
 
     const foundUser = users.findIndex(user => user.id === userId)
-    console.log(foundUser)
 
     if (foundUser === -1) res.status(404).json({ message: "The user you wanted to edit was not found" })
 
-    users[foundUser] = {
-        id: userId, 
+    const objectToValidate = {
+        id: users[foundUser]?.id, 
         username
     }
+
+    const zoddedUser = User.updateUser.parse(objectToValidate)
+
+    users[foundUser] = zoddedUser
 
     res.status(200).send({ user: users[foundUser], message: "User successfully updated" })
 }
@@ -53,7 +61,9 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
         }
     })
 
-    users.push({ id, username })
+    const zoddedUser = User.createUser.parse(req.body)
+
+    users.push(zoddedUser)
 
     res.status(200).send({ users, message: "User successfully created" })
 }

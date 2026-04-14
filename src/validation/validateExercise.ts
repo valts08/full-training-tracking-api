@@ -92,5 +92,9 @@ export default {
     strengthExercise,
     isoStrengthExercise,
     cardioExercise,
-    plyoExercise
+    plyoExercise,
+    updateStrengthExercise: strengthExercise.partial().required({ category: true }),
+    updateIsoStrengthExercise: isoStrengthExercise.partial().required({ category: true }),
+    updateCardioExercise: cardioExercise.partial().required({ category: true }),
+    updatePlyoExercise: plyoExercise.partial().required({ category: true })
 }
