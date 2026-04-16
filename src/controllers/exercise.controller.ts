@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import z from 'zod'
-import exerciseType from '../validation/validateZod.ts'
+import exerciseType from '../validation/validateExercise.ts'
 
 const exerciseValidation = z.discriminatedUnion("category", [
   exerciseType.strengthExercise,
@@ -9,9 +9,18 @@ const exerciseValidation = z.discriminatedUnion("category", [
   exerciseType.plyoExercise
 ])
 
-type Exercise = z.infer<typeof exerciseValidation>
+// for the update zod validation schema, find a way to exclude being able to update the ID, currently it's possible
+const updateExerciseValidation = z.discriminatedUnion("category", [
+  exerciseType.updateStrengthExercise,
+  exerciseType.updateIsoStrengthExercise,
+  exerciseType.updateCardioExercise,
+  exerciseType.updatePlyoExercise
+])
 
-const exercises: Exercise[] = [
+type CreateExercise = z.infer<typeof exerciseValidation>
+type updateExercise = z.infer<typeof updateExerciseValidation>
+
+const exercises: CreateExercise[] | updateExercise[] = [
   {
     id: "ex_001",
     name: "Barbell Back Squat",
@@ -280,19 +289,20 @@ const updateExercise = (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
 
   const passedId = req.params.id
-  const { name } = req.body
   const exerciseId = exercises.findIndex(exercise => exercise.id === passedId)
 
   if (exerciseId === -1) res.status(404).json({ message: `Didn't find exercise with ID ${passedId}`})
 
-  if (name === exercises[exerciseId]?.name) res.status(409).json({ message: "Exercise with this name already exists"})
-
-  exercises[exerciseId] = {
-    ...exercises[exerciseId],
+  const objectToValidate = {
+    id: exercises[exerciseId]?.id,
+    category: exercises[exerciseId]?.category,
     ...req.body
   }
 
-  res.status(200).send({ exercise: exercises[exerciseId], message: "Exercise successfully updated" })
+  const zoddedUpdate = updateExerciseValidation.parse(objectToValidate)
+  exercises[exerciseId] = zoddedUpdate
+
+  res.status(200).send({ exercise: zoddedUpdate, message: "Exercise successfully updated" })
 }
 
 const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
