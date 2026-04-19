@@ -1,26 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
-import z from 'zod'
-import exerciseType from '../validation/validateExercise.ts'
+import zodValidation from '../validation/validateExercise.ts'
+import type { CreateExercise, UpdateExercise } from '../validation/validateExercise.ts'
+import exerciseService from '../services/exercise.service.ts'
 
-const exerciseValidation = z.discriminatedUnion("category", [
-  exerciseType.strengthExercise,
-  exerciseType.isoStrengthExercise,
-  exerciseType.cardioExercise,
-  exerciseType.plyoExercise
-])
-
-// for the update zod validation schema, find a way to exclude being able to update the ID, currently it's possible
-const updateExerciseValidation = z.discriminatedUnion("category", [
-  exerciseType.updateStrengthExercise,
-  exerciseType.updateIsoStrengthExercise,
-  exerciseType.updateCardioExercise,
-  exerciseType.updatePlyoExercise
-])
-
-type CreateExercise = z.infer<typeof exerciseValidation>
-type updateExercise = z.infer<typeof updateExerciseValidation>
-
-const exercises: CreateExercise[] | updateExercise[] = [
+const exercises: CreateExercise[] | UpdateExercise[] = [
   {
     id: "ex_001",
     name: "Barbell Back Squat",
@@ -268,38 +251,22 @@ const getExercises = (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send({ exercises })
 }
 
-const createExercise = (req: Request, res: Response, next: NextFunction) => {
+const createExercise = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
 
-  const { id, name } = req.body
+  const requestData = req.body
+  const exercise = await exerciseService.createExercise(exercises, requestData)
 
-  const idExists = exercises.some(exercise => exercise.id === id)
-  const nameExists = exercises.some(exercise => exercise.name === name)
+  exercises.push(exercise)
 
-  if (idExists || nameExists) res.status(409).json({ message: "ID or name of exercise already exists" })
-
-  const newExercise = exerciseValidation.parse(req.body)
-
-  exercises.push(newExercise)
-
-  res.status(200).send({ exercise: newExercise, message: "New exercise added successfully" })
+  res.status(200).send({ exercise, message: "New exercise added successfully" })
 }
 
-const updateExercise = (req: Request, res: Response, next: NextFunction) => {
+const updateExercise = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) res.status(409).json({ message: "Error: Request body not included" })
 
-  const passedId = req.params.id
-  const exerciseId = exercises.findIndex(exercise => exercise.id === passedId)
+  const { exerciseId, zoddedUpdate } = await exerciseService.updateExercise(exercises, req)
 
-  if (exerciseId === -1) res.status(404).json({ message: `Didn't find exercise with ID ${passedId}`})
-
-  const objectToValidate = {
-    id: exercises[exerciseId]?.id,
-    category: exercises[exerciseId]?.category,
-    ...req.body
-  }
-
-  const zoddedUpdate = updateExerciseValidation.parse(objectToValidate)
   exercises[exerciseId] = zoddedUpdate
 
   res.status(200).send({ exercise: zoddedUpdate, message: "Exercise successfully updated" })

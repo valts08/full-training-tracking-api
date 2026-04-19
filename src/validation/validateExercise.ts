@@ -88,13 +88,25 @@ const plyoExercise = z.object({
   videoUrl: z.string().nullable()
 })
 
+const exerciseValidation = z.discriminatedUnion("category", [
+  strengthExercise,
+  isoStrengthExercise,
+  cardioExercise,
+  plyoExercise
+])
+
+// for the update zod validation schema, find a way to exclude being able to update the ID, currently it's possible
+const updateExerciseValidation = z.discriminatedUnion("category", [
+  strengthExercise.partial().required({ category: true }),
+  isoStrengthExercise.partial().required({ category: true }),
+  cardioExercise.partial().required({ category: true }),
+  plyoExercise.partial().required({ category: true })
+])
+
+export type CreateExercise = z.infer<typeof exerciseValidation>
+export type UpdateExercise = z.infer<typeof updateExerciseValidation>
+
 export default {
-    strengthExercise,
-    isoStrengthExercise,
-    cardioExercise,
-    plyoExercise,
-    updateStrengthExercise: strengthExercise.partial().required({ category: true }),
-    updateIsoStrengthExercise: isoStrengthExercise.partial().required({ category: true }),
-    updateCardioExercise: cardioExercise.partial().required({ category: true }),
-    updatePlyoExercise: plyoExercise.partial().required({ category: true })
+  exerciseValidation,
+  updateExerciseValidation
 }
