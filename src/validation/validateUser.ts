@@ -5,7 +5,12 @@ const createUser = z.object({
     username: z.string().min(3)
 })
 
+const updateUser = createUser.partial()
+
+export type UserCreateType = z.infer<typeof createUser>
+export type UserUpdateType = z.infer<typeof updateUser>
+
 export default {
     createUser,
-    updateUser: createUser.partial()
+    updateUser
 }

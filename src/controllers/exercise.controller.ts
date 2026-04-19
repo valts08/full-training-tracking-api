@@ -257,6 +257,8 @@ const createExercise = async (req: Request, res: Response, next: NextFunction) =
   const requestData = req.body
   const exercise = await exerciseService.createExercise(exercises, requestData)
 
+  exercises.push(exercise)
+
   res.status(200).send({ exercise, message: "New exercise added successfully" })
 }
 
