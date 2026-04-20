@@ -14,16 +14,15 @@ const createExercise = (exerciseArr: CreateExercise[] | UpdateExercise[], data: 
     return newExercise
 }
 
-const updateExercise = (exerciseArr: UpdateExercise[] | UpdateExercise[], data: any) => {
-    const passedId = data.params.id
-    const exerciseId = exerciseArr.findIndex(exercise => exercise.id === passedId)
+const updateExercise = (exerciseArr: UpdateExercise[] | UpdateExercise[], dataBody: object, passedExerciseId: string) => {
+    const exerciseId = exerciseArr.findIndex(exercise => exercise.id === passedExerciseId)
 
-    if (exerciseId === -1) throw new Error(`Didn't find exercise with ID ${passedId}`)
+    if (exerciseId === -1) throw new Error(`Didn't find exercise with ID ${passedExerciseId}`)
 
     const objectToValidate = {
         id: exerciseArr[exerciseId]?.id,
         category: exerciseArr[exerciseId]?.category,
-        ...data.body
+        ...dataBody
     }
 
     const zoddedUpdate = zodValidation.updateExerciseValidation.parse(objectToValidate)

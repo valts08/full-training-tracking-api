@@ -17,17 +17,15 @@ const createUser = (users: UserCreateType[] | UserUpdateType[], data: any) => {
     return zoddedUser
 }
 
-const updateUser = (users: UserCreateType[] | UserUpdateType[], data: any) => {
-    const userId = data.params.id as string
-    const { username } = data.body
+const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreateType | UserUpdateType, passedUserId: string) => {
 
-    const foundUser = users.findIndex(user => user.id === userId)
+    const foundUser = users.findIndex(user => user.id === passedUserId)
 
     if (foundUser === -1) throw new Error("The user you wanted to edit was not found")
 
     const objectToValidate = {
         id: users[foundUser]?.id, 
-        username
+        username: data.username
     }
 
     const zoddedUser = zodValidation.updateUser.parse(objectToValidate)
