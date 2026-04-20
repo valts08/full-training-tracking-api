@@ -24,9 +24,9 @@ app.use('/user', userRouter)
 app.use('/workout', workoutRouter)
 app.use('/exercise', exerciseRouter)
 
-app.use(globalErrorHandler)
 app.use(unknownRouteHandler)
+app.use(globalErrorHandler)
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log('connecting to server')
+    console.log(`Server listening on port ${process.env.PORT}`)
 })

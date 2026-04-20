@@ -1,87 +1,8 @@
-import type { Response, Request, NextFunction } from 'express' 
-
-const workouts = [
-  {
-    id: "wkt_001",
-    userId: "usr_a1b2c3",
-    title: "Upper Body Strength",
-    createdAt: "2025-03-12T08:30:00Z",
-    durationMinutes: 55,
-    difficulty: "intermediate",
-    exerciseTypes: ["chest", "shoulders", "triceps", "back"],
-    exercises: [
-      { name: "Bench Press", sets: 4, reps: 8, weightKg: 80 },
-      { name: "Overhead Press", sets: 3, reps: 10, weightKg: 55 },
-      { name: "Pull-ups", sets: 3, reps: 10, weightKg: null },
-      { name: "Tricep Dips", sets: 3, reps: 12, weightKg: null },
-    ],
-    notes: "Focus on slow eccentric on bench press",
-  },
-  {
-    id: "wkt_002",
-    userId: "usr_d4e5f6",
-    title: "Marathon Tempo Run",
-    createdAt: "2025-03-14T06:00:00Z",
-    durationMinutes: 65,
-    difficulty: "hard",
-    exerciseTypes: ["cardio", "endurance"],
-    exercises: [
-      { name: "Warm-up Jog", sets: 1, durationMinutes: 10, paceMinPerKm: 6.5 },
-      { name: "Tempo Intervals", sets: 5, durationMinutes: 8, paceMinPerKm: 4.8 },
-      { name: "Cool-down Walk", sets: 1, durationMinutes: 7, paceMinPerKm: null },
-    ],
-    notes: "Heart rate zone 3-4 during tempo blocks",
-  },
-  {
-    id: "wkt_003",
-    userId: "usr_a1b2c3",
-    title: "Lower Body + Plyometrics",
-    createdAt: "2025-03-16T09:15:00Z",
-    durationMinutes: 70,
-    difficulty: "hard",
-    exerciseTypes: ["legs", "glutes", "plyometrics"],
-    exercises: [
-      { name: "Back Squat", sets: 5, reps: 5, weightKg: 110 },
-      { name: "Romanian Deadlift", sets: 3, reps: 10, weightKg: 85 },
-      { name: "Box Jumps", sets: 4, reps: 8, weightKg: null },
-      { name: "Bulgarian Split Squat", sets: 3, reps: 10, weightKg: 30 },
-    ],
-    notes: "Box jumps after squats — keep rest 90s between squat sets",
-  },
-  {
-    id: "wkt_004",
-    userId: "usr_g7h8i9",
-    title: "Full Body HIIT",
-    createdAt: "2025-03-17T17:45:00Z",
-    durationMinutes: 30,
-    difficulty: "beginner",
-    exerciseTypes: ["cardio", "chest", "legs", "core"],
-    exercises: [
-      { name: "Burpees", sets: 3, reps: 15, weightKg: null },
-      { name: "Push-ups", sets: 3, reps: 20, weightKg: null },
-      { name: "Jump Squats", sets: 3, reps: 15, weightKg: null },
-      { name: "Mountain Climbers", sets: 3, durationSeconds: 40, weightKg: null },
-    ],
-    notes: "40s work / 20s rest format",
-  },
-  {
-    id: "wkt_005",
-    userId: "usr_d4e5f6",
-    title: "Long Run",
-    createdAt: "2025-03-20T07:00:00Z",
-    durationMinutes: 120,
-    difficulty: "intermediate",
-    exerciseTypes: ["cardio", "endurance"],
-    exercises: [
-      { name: "Easy Aerobic Run", sets: 1, distanceKm: 22, paceMinPerKm: 5.5 },
-      { name: "Strides", sets: 6, distanceKm: 0.1, paceMinPerKm: 3.8 },
-    ],
-    notes: "Last 2km at marathon goal pace. Gel at 10k and 17k.",
-  },
-];
+import type { Response, Request, NextFunction } from 'express';
+import workouts from '../data/workoutMock.ts';
 
 const getWorkouts = (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send({ workouts })
+    return res.status(200).send({ workouts })
 }
 
 const getWorkoutById = (req: Request, res: Response, next: NextFunction) => {
@@ -89,9 +10,9 @@ const getWorkoutById = (req: Request, res: Response, next: NextFunction) => {
 
     const foundWorkout = workouts.find(workout => workout.id === workoutId)
 
-    if (foundWorkout == undefined) res.status(409).json({ message: `No workouts found with id ${workoutId}` })
+    if (foundWorkout == undefined) return res.status(409).json({ message: `No workouts found with id ${workoutId}` })
 
-    res.status(200).send({ workout: foundWorkout, message: "Workout found successfully" })
+    return res.status(200).send({ workout: foundWorkout, message: "Workout found successfully" })
 }
 
 export default {
