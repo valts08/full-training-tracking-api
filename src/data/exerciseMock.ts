@@ -2,7 +2,7 @@ import type { CreateExercise, UpdateExercise } from "../validation/validateExerc
 
 const exercises: CreateExercise[] | UpdateExercise[] = [
   {
-    id: "ex_001",
+    id: 1,
     name: "Barbell Back Squat",
     muscleGroups: {
       primary: ["quads", "glutes"],
@@ -16,17 +16,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 4,
     repRange: { min: 4, max: 8 },
     restSeconds: 180,
-    instructions: [
-      "Position bar on upper traps, grip just outside shoulder width",
-      "Brace core and unrack the bar",
-      "Descend until hips are at or below knee level",
-      "Drive through the floor and lock out at the top",
-    ],
+    instructions: 
+      "Position bar on upper traps, grip just outside shoulder width,      Brace core and unrack the bar,      Descend until hips are at or below knee level,    Drive through the floor and lock out at the top",
     tips: "Keep chest tall and knees tracking over toes throughout",
+    userId: 1,
     videoUrl: null,
   },
   {
-    id: "ex_002",
+    id: 2,
     name: "Romanian Deadlift",
     muscleGroups: {
       primary: ["hamstrings", "glutes"],
@@ -40,17 +37,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     repRange: { min: 8, max: 12 },
     restSeconds: 120,
-    instructions: [
-      "Stand with feet hip-width apart, bar in an overhand grip",
-      "Hinge at the hips, pushing them back while keeping a neutral spine",
-      "Lower bar along the legs until a deep hamstring stretch is felt",
-      "Drive hips forward to return to standing",
-    ],
+    instructions: 
+      "Stand with feet hip-width apart, bar in an overhand grip,      Hinge at the hips, pushing them back while keeping a neutral spine,      Lower bar along the legs until a deep hamstring stretch is felt,      Drive hips forward to return to standing",
     tips: "Soften the knees slightly — this is a hip hinge, not a squat",
+    userId: 2,
     videoUrl: null,
   },
   {
-    id: "ex_003",
+    id: 3,
     name: "Overhead Press",
     muscleGroups: {
       primary: ["anterior deltoid", "lateral deltoid"],
@@ -64,17 +58,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 4,
     repRange: { min: 5, max: 8 },
     restSeconds: 150,
-    instructions: [
-      "Grip bar just outside shoulder width, elbows slightly in front of bar",
-      "Brace core and glutes hard before pressing",
-      "Press bar overhead, moving head back slightly to clear the path",
-      "Lock out overhead, shrug traps at the top",
-    ],
+    instructions: 
+      "Grip bar just outside shoulder width, elbows slightly in front of bar,     Brace core and glutes hard before pressing,      Press bar overhead, moving head back slightly to clear the path,      Lock out overhead, shrug traps at the top",
     tips: "Squeeze glutes to prevent lower back arching under heavy load",
+    userId: 3,
     videoUrl: null,
   },
   {
-    id: "ex_004",
+    id: 4,
     name: "Pull-up",
     muscleGroups: {
       primary: ["lats", "biceps"],
@@ -88,17 +79,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     repRange: { min: 6, max: 12 },
     restSeconds: 90,
-    instructions: [
-      "Hang from bar with an overhand grip, slightly wider than shoulder width",
-      "Depress and retract scapulae before pulling",
-      "Pull until chin clears the bar",
-      "Lower under control to full hang",
-    ],
+    instructions: 
+      "Hang from bar with an overhand grip, slightly wider than shoulder width,      Depress and retract scapulae before pulling,      Pull until chin clears the bar,      Lower under control to full hang",
     tips: "Initiate with the lats, not the arms — think elbows to hips",
+    userId: 4,
     videoUrl: null,
   },
   {
-    id: "ex_005",
+    id: 5,
     name: "Bulgarian Split Squat",
     muscleGroups: {
       primary: ["quads", "glutes"],
@@ -112,17 +100,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     repRange: { min: 8, max: 12 },
     restSeconds: 90,
-    instructions: [
-      "Elevate rear foot on a bench, stand about 2 feet in front of it",
-      "Hold a dumbbell in each hand",
-      "Descend until front thigh is roughly parallel to the floor",
-      "Press through the front heel to return to the top",
-    ],
+    instructions: 
+      "Elevate rear foot on a bench, stand about 2 feet in front of it,      Hold a dumbbell in each hand,      Descend until front thigh is roughly parallel to the floor,      Press through the front heel to return to the top",
     tips: "Keep torso upright — forward lean shifts load to the hip flexor",
+    userId: 5,
     videoUrl: null,
   },
   {
-    id: "ex_006",
+    id: 6,
     name: "Box Jump",
     muscleGroups: {
       primary: ["quads", "glutes", "calves"],
@@ -136,17 +121,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 4,
     repRange: { min: 5, max: 8 },
     restSeconds: 90,
-    instructions: [
-      "Stand facing the box at arm's length",
-      "Dip into a quarter squat, swing arms back",
-      "Explode up, swinging arms forward and pulling knees up",
-      "Land softly with knees bent, stand tall, then step down",
-    ],
+    instructions: 
+      "Stand facing the box at arm's length,      Dip into a quarter squat, swing arms back,      Explode up, swinging arms forward and pulling knees up,      Land softly with knees bent, stand tall, then step down",
     tips: "Always step down — never jump down; it defeats the recovery purpose",
+    userId: 6,
     videoUrl: null,
   },
   {
-    id: "ex_007",
+    id: 7,
     name: "Tempo Run",
     muscleGroups: {
       primary: ["quads", "hamstrings", "calves", "glutes"],
@@ -161,17 +143,13 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     durationRange: { minMinutes: 20, maxMinutes: 50 },
     targetPaceMinPerKm: { min: 4.5, max: 5.2 },
     restSeconds: 300,
-    instructions: [
-      "Warm up with 10 minutes of easy jogging",
-      "Build to a comfortably hard pace — around a 7/10 effort",
-      "Maintain that pace for the target duration without drifting",
-      "Cool down with 5-10 minutes of easy jogging",
-    ],
+    instructions: "Warm up with 10 minutes of easy jogging,Build to a comfortably hard pace — around a 7/10 effort,Maintain that pace for the target duration without drifting, Cool down with 5-10 minutes of easy jogging",
     tips: "You should be able to speak in short phrases, not full sentences",
+    userId: 7,
     videoUrl: null,
   },
   {
-    id: "ex_008",
+    id: 8,
     name: "Plank",
     muscleGroups: {
       primary: ["core", "transverse abdominis"],
@@ -185,17 +163,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     durationRange: { minSeconds: 30, maxSeconds: 90 },
     restSeconds: 60,
-    instructions: [
-      "Place forearms on the floor, elbows under shoulders",
-      "Form a straight line from head to heel",
-      "Brace the entire core — posterior pelvic tilt slightly",
-      "Hold for the target duration without letting hips sag or pike",
-    ],
+    instructions: 
+      "Place forearms on the floor, elbows under shoulders,      Form a straight line from head to heel,      Brace the entire core — posterior pelvic tilt slightly,      Hold for the target duration without letting hips sag or pike",
     tips: "Push the floor away with your forearms to engage the serratus",
+    userId: 8,
     videoUrl: null,
   },
   {
-    id: "ex_009",
+    id: 9,
     name: "Cable Row",
     muscleGroups: {
       primary: ["rhomboids", "mid traps", "lats"],
@@ -209,17 +184,14 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     repRange: { min: 10, max: 15 },
     restSeconds: 90,
-    instructions: [
-      "Sit at the cable station, feet braced, slight bend in knees",
-      "Grip the handle with arms extended and a tall spine",
-      "Retract the scapulae first, then pull elbows back past your torso",
-      "Pause briefly at full contraction, return under control",
-    ],
+    instructions: 
+      "Sit at the cable station, feet braced, slight bend in knees,      Grip the handle with arms extended and a tall spine,      Retract the scapulae first, then pull elbows back past your torso,      Pause briefly at full contraction, return under control",
     tips: "Avoid rocking the torso — the row is a back exercise, not a swing",
+    userId: 9,
     videoUrl: null,
   },
   {
-    id: "ex_010",
+    id: 10,
     name: "Dumbbell Lateral Raise",
     muscleGroups: {
       primary: ["lateral deltoid"],
@@ -233,13 +205,10 @@ const exercises: CreateExercise[] | UpdateExercise[] = [
     defaultSets: 3,
     repRange: { min: 12, max: 20 },
     restSeconds: 60,
-    instructions: [
-      "Stand with a dumbbell in each hand, slight bend in the elbows",
-      "Raise arms out to the sides until parallel to the floor",
-      "Lead with the pinkies to keep the lateral head engaged",
-      "Lower slowly over 2-3 seconds",
-    ],
+    instructions: 
+      "Stand with a dumbbell in each hand, slight bend in the elbows,      Raise arms out to the sides until parallel to the floor,      Lead with the pinkies to keep the lateral head engaged,      Lower slowly over 2-3 seconds",
     tips: "Go lighter than you think — momentum kills the stimulus here",
+    userId: 10,
     videoUrl: null,
   },
 ];

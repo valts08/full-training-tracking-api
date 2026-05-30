@@ -1,23 +1,33 @@
 import zodValidation from '../validation/validateUser.ts'
 import type { UserCreateType, UserUpdateType } from "../validation/validateUser.ts";
+import { prisma } from '../../prisma/prismaClient.ts';
 
-const createUser = (users: UserCreateType[] | UserUpdateType[], data: any) => {
-    const { id, username } = data
-    
-    if (!id || !username) throw new Error("Error: user ID or username missing, check the request body") // will replace later with Zod validation
-
-    users.forEach(user => {
-        if (user.id === id || user.username === username) { // change later just to a username check, id should be checked separately since it should be set at create time
-            throw new Error("User with that ID or username already exists")
-        }
-    })
-
-    const zoddedUser = zodValidation.createUser.parse(data)
-
-    return zoddedUser
+const getUsers = async () => {
+    const users = await prisma.user.findMany()
+    return users
 }
 
-const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreateType | UserUpdateType, passedUserId: string) => {
+const createUser = async (data: UserCreateType) => {
+    const { username } = data
+    
+    if (!username) throw new Error("Error: user ID or username missing, check the request body")
+
+    const usernameExists = await prisma.user.findFirst({
+        where: { username }
+    })
+
+    if (usernameExists) throw new Error("User with that username already exists")
+
+    const newUser = zodValidation.createUserNoId.parse(data)
+
+    const user = await prisma.user.create({
+        data: { ...newUser }
+    })
+
+    return user
+}
+
+const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreateType | UserUpdateType, passedUserId: number) => {
 
     const foundUser = users.findIndex(user => user.id === passedUserId)
 
@@ -33,7 +43,13 @@ const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreate
     return { foundUser, zoddedUser }
 }
 
+const deleteUsers = async () => {
+    
+}
+
 export default {
+    getUsers,
     createUser,
-    updateUser
+    updateUser,
+    deleteUsers
 }

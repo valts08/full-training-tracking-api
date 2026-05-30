@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+model Workout {
+  id                  Int         @id @default(autoincrement())
+  createdAt           DateTime    @db.Timestamptz
+  modifiedAt          DateTime    @db.Timestamptz
+  durationMinutes     Int
+  difficulty          String      @db.VarChar(20)
+  exerciseTypes       Json        @db.JsonB
+  notes               String      @db.Text
+  title               String      @db.VarChar(255)
+  exercise            WorkoutExercise[]
+}
+
+model Exercise {
+  id                  Int       @id @default(autoincrement())
+  name                String    @db.VarChar(50)
+  muscleGroups        Json      @db.JsonB
+  category            String
+  movementPattern     String
+  equipment           Json      @db.JsonB
+  mechanics           String    @db.VarChar(20)
+  laterality          String    @db.VarChar(20)
+  defaultSets         Int
+  repRange            Json?     @db.JsonB
+  durationRange       Json?     @db.JsonB
+  targetPaceMinPerKm  Json?     @db.JsonB
+  restSeconds         Int
+  instructions        String    @db.Text
+  tips                String    @db.VarChar(255)
+  videoUrl            String?   @db.VarChar(255)
+  userId              Int
+  user                User      @relation(fields: [userId], references: [id])
+  workout             WorkoutExercise[]
+}
+
+model WorkoutExercise {
+  workoutId           Int
+  workout             Workout   @relation(fields: [workoutId], references: [id])
+  exerciseId          Int
+  exercise            Exercise  @relation(fields: [exerciseId], references: [id])
+  @@id([workoutId, exerciseId])
+}
+
+model User {
+  id                  Int       @id @default(autoincrement())
+  exercises           Exercise[]
+  username            String    @db.VarChar(100)
+}

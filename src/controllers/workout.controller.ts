@@ -1,18 +1,29 @@
 import type { Response, Request, NextFunction } from 'express';
-import workouts from '../data/workoutMock.ts';
+import workoutService from '../services/workout.service.ts';
 
-const getWorkouts = (req: Request, res: Response, next: NextFunction) => {
+const getWorkouts = async (req: Request, res: Response, next: NextFunction) => {
+    const workouts = await workoutService.getWorkout()
     return res.status(200).send({ workouts })
 }
 
-const getWorkoutById = (req: Request, res: Response, next: NextFunction) => {
-    const workoutId = req.params.id
+const getWorkoutById = async (req: Request, res: Response, next: NextFunction) => {
+    const workoutId = req.params.id as unknown as number // should probably think of something better for this 
 
-    const foundWorkout = workouts.find(workout => workout.id === workoutId)
+    const workout = await workoutService.getWorkoutById(workoutId)
 
-    if (foundWorkout == undefined) return res.status(409).json({ message: `No workouts found with id ${workoutId}` })
+    return res.status(200).send({ workout, message: "Workout found successfully" })
+}
 
-    return res.status(200).send({ workout: foundWorkout, message: "Workout found successfully" })
+const createWorkout = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
+const updateWorkout = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
+const deleteWorkout = async (req: Request, res: Response, next: NextFunction) => {
+
 }
 
 export default {

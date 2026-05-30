@@ -1,15 +1,15 @@
 import type { Response, Request, NextFunction } from 'express'
 import userService from '../services/user.service.ts'
-import users from '../data/userMock.ts'
 
-const getUsers = (req: Request, res: Response, next: NextFunction) => {
-    return res.status(200).send({ users, message: "User list successfully sent" })
+const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await userService.getUsers()
+    return res.status(200).json({ users })
 }
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const userRequestBody = req.body
-    const passedUserId = req.params.id as string
+    const passedUserId = req.params.id as unknown as number
     
     const { foundUser, zoddedUser } = await userService.updateUser(users, userRequestBody, passedUserId)
 
@@ -23,11 +23,9 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const userRequestBody = req.body
 
-    const newUser = await userService.createUser(users, userRequestBody)
+    const newUser = await userService.createUser(userRequestBody)
 
-    users.push(newUser)
-
-    return res.status(201).send({ users, message: "User successfully created" })
+    return res.status(201).send({ newUser, message: "User successfully created" })
 }
 
 const deleteUser = (req: Request, res: Response, next: NextFunction) => {
