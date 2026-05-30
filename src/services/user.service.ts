@@ -1,5 +1,5 @@
 import zodValidation from '../validation/validateUser.ts'
-import type { UserCreateType, UserUpdateType } from "../validation/validateUser.ts";
+import type { User } from "../validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
 
 const getUsers = async () => {
@@ -7,7 +7,7 @@ const getUsers = async () => {
     return users
 }
 
-const createUser = async (data: UserCreateType) => {
+const createUser = async (data: User) => {
     const { username } = data
     
     if (!username) throw new Error("Error: user ID or username missing, check the request body")
@@ -18,7 +18,7 @@ const createUser = async (data: UserCreateType) => {
 
     if (usernameExists) throw new Error("User with that username already exists")
 
-    const newUser = zodValidation.createUserNoId.parse(data)
+    const newUser = zodValidation.validateUser.parse(data)
 
     const user = await prisma.user.create({
         data: { ...newUser }
@@ -27,7 +27,7 @@ const createUser = async (data: UserCreateType) => {
     return user
 }
 
-const updateUser = async (data: UserUpdateType, passedUserId: number) => {
+const updateUser = async (data: User, passedUserId: number) => {
 
     const foundUser = await prisma.user.findFirst({
         where: { id: passedUserId }
@@ -35,12 +35,12 @@ const updateUser = async (data: UserUpdateType, passedUserId: number) => {
 
     if (!foundUser) throw new Error("The user you wanted to edit was not found")
         
-    const validatedUser = zodValidation.updateUser.parse(data)
+    const validatedUser = zodValidation.validateUser.parse(data)
 
     const user = await prisma.user.update({
         where: { id: passedUserId },
         update: {
-            ...data
+            ...validatedUser
         }
     })
 

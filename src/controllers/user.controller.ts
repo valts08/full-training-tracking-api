@@ -9,11 +9,11 @@ const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const userRequestBody = req.body
-    const passedUserId = req.params.id as unknown as number
+    const passedUserId = Number(req.params.id)
     
     const newUser = await userService.updateUser(userRequestBody, passedUserId)
 
-    return res.status(200).send({ newUser, message: "User successfully updated" })
+    return res.status(200).json({ newUser, message: "User successfully updated" })
 }
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +23,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const newUser = await userService.createUser(userRequestBody)
 
-    return res.status(201).send({ newUser, message: "User successfully created" })
+    return res.status(201).json({ newUser, message: "User successfully created" })
 }
 
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const deletedUser = await userService.deleteUser(userId)
 
-    return res.status(200).send({ user: deletedUser, message: "User successfully deleted" })
+    return res.status(200).json({ user: deletedUser, message: "User successfully deleted" })
 }
 
 export default {

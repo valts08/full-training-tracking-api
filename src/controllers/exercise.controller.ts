@@ -14,7 +14,7 @@ const createExercise = async (req: Request, res: Response, next: NextFunction) =
   const exerciseRequestBody = req.body
   const exercise = await exerciseService.createExercise(exerciseRequestBody)
 
-  return res.status(201).send({ exercise, message: "New exercise added successfully" })
+  return res.status(201).json({ exercise, message: "New exercise added successfully" })
 }
 
 const updateExercise = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +25,7 @@ const updateExercise = async (req: Request, res: Response, next: NextFunction) =
 
   const exercise = await exerciseService.updateExercise(exerciseRequestBody, passedExerciseId)
 
-  return res.status(200).send({ exercise, message: "Exercise successfully updated" })
+  return res.status(200).json({ exercise, message: "Exercise successfully updated" })
 }
 
 const deleteExercise = async (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +33,7 @@ const deleteExercise = async (req: Request, res: Response, next: NextFunction) =
 
   const deletedExercise = await exerciseService.deleteExercise(passedId)
 
-  return res.status(200).send({ exercise: deletedExercise, message: "Exercise deleted successfully"})
+  return res.status(200).json({ exercise: deletedExercise, message: "Exercise deleted successfully"})
 }
 
 export default {

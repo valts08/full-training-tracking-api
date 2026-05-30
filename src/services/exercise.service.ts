@@ -9,12 +9,14 @@ const getExercises = async () => {
     return exercises
 }
 
+// explore the idea of creating a "dynamic" route, meaning that you can query exercises based on a custom attribute that the object has
+
 const createExercise = async (data: CreateExercise) => {
 
     const newExercise = zodValidation.exerciseValidation.parse(data)
 
     const exercise = await prisma.exercise.create({
-        data: toCreateExerciseInput(newExercise), // make a mapper function
+        data: toCreateExerciseInput(newExercise)
     })
 
     return exercise
