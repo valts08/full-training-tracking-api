@@ -27,29 +27,44 @@ const createUser = async (data: UserCreateType) => {
     return user
 }
 
-const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreateType | UserUpdateType, passedUserId: number) => {
+const updateUser = async (data: UserUpdateType, passedUserId: number) => {
 
-    const foundUser = users.findIndex(user => user.id === passedUserId)
+    const foundUser = await prisma.user.findFirst({
+        where: { id: passedUserId }
+    })
 
-    if (foundUser === -1) throw new Error("The user you wanted to edit was not found")
+    if (!foundUser) throw new Error("The user you wanted to edit was not found")
+        
+    const validatedUser = zodValidation.updateUser.parse(data)
 
-    const objectToValidate = {
-        id: users[foundUser]?.id, 
-        username: data.username
-    }
+    const user = await prisma.user.update({
+        where: { id: passedUserId },
+        update: {
+            ...data
+        }
+    })
 
-    const zoddedUser = zodValidation.updateUser.parse(objectToValidate)
-
-    return { foundUser, zoddedUser }
+    return user
 }
 
-const deleteUsers = async () => {
+const deleteUser = async (userId: number) => {
     
+    const userToDelete = await prisma.user.findFirst({
+        where: { id: userId }
+    })
+
+    if (!userToDelete) throw new Error( "User Id not found")
+
+    const deletedUser = await prisma.user.delete({
+        where: { id: userId }
+    })
+
+    return deletedUser
 }
 
 export default {
     getUsers,
     createUser,
     updateUser,
-    deleteUsers
+    deleteUser
 }
