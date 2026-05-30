@@ -10,13 +10,6 @@ const getExercises = async () => {
 }
 
 const createExercise = async (data: CreateExercise) => {
-    const { id } = data
-    
-    const existingExercise = await prisma.exercise.findUnique({
-        where: { id }
-    })
-
-    if (existingExercise?.id || existingExercise?.name) throw new Error("ID or name of exercise already exists")
 
     const newExercise = zodValidation.exerciseValidation.parse(data)
 
@@ -29,21 +22,42 @@ const createExercise = async (data: CreateExercise) => {
 
 const updateExercise = async (dataBody: UpdateExercise, passedExerciseId: number) => {
 
+    const exerciseToUpdate = await prisma.exercise.findUnique({
+        where: { id: passedExerciseId }
+    })
+
+    if (!exerciseToUpdate) throw new Error(`Couldn't find exercise to update, make sure you have the right ID`)
+
     const validExercise = validateExercise.updateExerciseValidation.parse(dataBody)
-    
-    const exerciseToUpdate = await prisma.exercise.update({
+    const exercise = await prisma.exercise.update({
         where: {
-            id: Number(passedExerciseId)
+            id: passedExerciseId
         },
         data: toUpdateExerciseInput(validExercise)
         
     })
     
-    return exerciseToUpdate
+    return exercise
+}
+
+const deleteExercise = async (userId: number) => {
+    
+    const exerciseToDelete = await prisma.exercise.findUnique({
+        where: { id: userId }
+    })
+
+    if (!exerciseToDelete) throw new Error(`Didn't find exercise with ID ${userId}`)
+    
+    const deletedExercise = await prisma.exercise.delete({
+        where: { id: userId }
+    })
+
+    return deletedExercise
 }
 
 export default {
     getExercises,
     createExercise,
-    updateExercise
+    updateExercise,
+    deleteExercise
 }
