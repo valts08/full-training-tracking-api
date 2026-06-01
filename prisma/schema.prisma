@@ -14,8 +14,8 @@ generator client {
 
 model Workout {
   id                  Int         @id @default(autoincrement())
-  createdAt           DateTime    @db.Timestamptz
-  modifiedAt          DateTime    @db.Timestamptz
+  createdAt           BigInt
+  modifiedAt          BigInt
   durationMinutes     Int
   difficulty          String      @db.VarChar(20)
   exerciseTypes       Json        @db.JsonB

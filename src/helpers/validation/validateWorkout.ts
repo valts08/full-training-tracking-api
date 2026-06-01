@@ -10,7 +10,8 @@ const validateWorkout = z.object({
 
 const validateWorkoutUpdate = validateWorkout.partial()
 
-export type Workout = z.infer<typeof validateWorkout>
+export type CreateWorkoutTyoe = z.infer<typeof validateWorkout>
+export type UpdateWorkoutTyoe = z.infer<typeof validateWorkoutUpdate>
 
 export default {
     validateWorkout,

@@ -1,7 +1,7 @@
-import zodValidation from '../validation/validateExercise.ts'
-import type { CreateExercise, UpdateExercise } from '../validation/validateExercise.ts'
-import validateExercise from '../validation/validateExercise.ts'
-import { toCreateExerciseInput, toUpdateExerciseInput } from '../validation/mappers/exercise.mapper.ts'
+import zodValidation from '../helpers/validation/validateExercise.ts'
+import type { CreateExercise, UpdateExercise } from '../helpers/validation/validateExercise.ts'
+import validateExercise from '../helpers/validation/validateExercise.ts'
+import { toCreateExerciseInput, toUpdateExerciseInput } from '../helpers/mappers/exercise.mapper.ts'
 import { prisma } from '../../prisma/prismaClient.ts'
 
 const getExercises = async () => {

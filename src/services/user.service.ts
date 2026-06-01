@@ -1,5 +1,5 @@
-import zodValidation from '../validation/validateUser.ts'
-import type { User } from "../validation/validateUser.ts";
+import zodValidation from '../helpers/validation/validateUser.ts'
+import type { User } from "../helpers/validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
 
 const getUsers = async () => {
@@ -39,7 +39,7 @@ const updateUser = async (data: User, passedUserId: number) => {
 
     const user = await prisma.user.update({
         where: { id: passedUserId },
-        update: {
+        data: {
             ...validatedUser
         }
     })
