@@ -1,6 +1,5 @@
 import zodValidation from '../helpers/validation/validateExercise.ts'
 import type { CreateExercise, UpdateExercise } from '../helpers/validation/validateExercise.ts'
-import validateExercise from '../helpers/validation/validateExercise.ts'
 import { toCreateExerciseInput, toUpdateExerciseInput } from '../helpers/mappers/exercise.mapper.ts'
 import { prisma } from '../../prisma/prismaClient.ts'
 
@@ -30,7 +29,7 @@ const updateExercise = async (dataBody: UpdateExercise, passedExerciseId: number
 
     if (!exerciseToUpdate) throw new Error(`Couldn't find exercise to update, make sure you have the right ID`)
 
-    const validExercise = validateExercise.updateExerciseValidation.parse(dataBody)
+    const validExercise = zodValidation.updateExerciseValidation.parse(dataBody)
     const exercise = await prisma.exercise.update({
         where: {
             id: passedExerciseId

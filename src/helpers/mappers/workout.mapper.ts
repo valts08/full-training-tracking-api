@@ -1,11 +1,12 @@
 import type { WorkoutUncheckedCreateInput, WorkoutUncheckedUpdateInput } from "../../generated/prisma/models.ts";
-import type { CreateWorkoutTyoe, UpdateWorkoutTyoe } from "../validation/validateWorkout.ts";
+import type { CreateWorkoutType, UpdateWorkoutType } from "../validation/validateWorkout.ts";
 
-export const toWorkoutInput = (workout: CreateWorkoutTyoe): WorkoutUncheckedCreateInput => {
+type WorkoutBaseType = Omit<CreateWorkoutType, 'exerciseIds'>
+
+export const toWorkoutInput = (workout: WorkoutBaseType): WorkoutUncheckedCreateInput => {
     const base = {
-        durationsMinute: workout.durationMinutes,
+        durationMinutes: workout.durationMinutes,
         difficulty: workout.difficulty,
-        exerciseType: workout.exerciseTypes,
         notes: workout.notes,
         title: workout.title
     }
@@ -13,11 +14,10 @@ export const toWorkoutInput = (workout: CreateWorkoutTyoe): WorkoutUncheckedCrea
     return { ...base } as unknown as WorkoutUncheckedCreateInput
 }
 
-export const toWorkoutUpdateInput = (workout: UpdateWorkoutTyoe): WorkoutUncheckedUpdateInput => {
+export const toWorkoutUpdateInput = (workout: UpdateWorkoutType): WorkoutUncheckedUpdateInput => {
     const base = {
-        durationsMinute: workout.durationMinutes,
+        durationMinutes: workout.durationMinutes,
         difficulty: workout.difficulty,
-        exerciseType: workout.exerciseTypes,
         notes: workout.notes,
         title: workout.title
     }

@@ -1,4 +1,4 @@
-import type { CreateWorkoutTyoe, UpdateWorkoutTyoe } from "../helpers/validation/validateWorkout.ts";
+import type { CreateWorkoutType, UpdateWorkoutType } from "../helpers/validation/validateWorkout.ts";
 import zodValidation from "../helpers/validation/validateWorkout.ts";
 import { prisma } from "../../prisma/prismaClient.ts";
 import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.ts";
@@ -16,21 +16,28 @@ const getWorkoutById = async (id: number) => {
     return workouts
 }
 
-const createWorkout = async (workoutData: CreateWorkoutTyoe) => {
-    const validWorkout = toWorkoutInput(zodValidation.validateWorkout.parse(workoutData))
+const createWorkout = async (workoutData: CreateWorkoutType) => {
+    const validWorkout = zodValidation.validateWorkout.parse(workoutData)
+
+    const { exerciseIds, ...validWorkoutObject } = validWorkout
 
     const workout = await prisma.workout.create({
         data: {
-            ...validWorkout,
+            ...toWorkoutInput(validWorkoutObject),
             createdAt: Date.now(),
-            modifiedAt: Date.now()
+            modifiedAt: Date.now(),
+            workoutExercises: {
+                create: exerciseIds.map((exerciseId: number) => ({
+                    exercise: { connect: { id: exerciseId } }
+                }))
+            }
         }
     })
 
     return workout
 }
 
-const updateWorkout = async (workoutData: UpdateWorkoutTyoe, workoutId: number) => {
+const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) => {
     const validWorkout = toWorkoutUpdateInput(zodValidation.validateWorkoutUpdate.parse(workoutData))
 
     const workoutExists = await prisma.workout.findUnique({

@@ -14,14 +14,13 @@ generator client {
 
 model Workout {
   id                  Int         @id @default(autoincrement())
-  createdAt           BigInt
-  modifiedAt          BigInt
+  createdAt           Float
+  modifiedAt          Float
   durationMinutes     Int
   difficulty          String      @db.VarChar(20)
-  exerciseTypes       Json        @db.JsonB
   notes               String      @db.Text
   title               String      @db.VarChar(255)
-  exercise            WorkoutExercise[]
+  workoutExercises    WorkoutExercise[]
 }
 
 model Exercise {
@@ -43,7 +42,7 @@ model Exercise {
   videoUrl            String?   @db.VarChar(255)
   userId              Int
   user                User      @relation(fields: [userId], references: [id])
-  workout             WorkoutExercise[]
+  workoutExercises    WorkoutExercise[]
 }
 
 model WorkoutExercise {
