@@ -39,9 +39,7 @@ const updateUser = async (data: User, passedUserId: number) => {
 
     const user = await prisma.user.update({
         where: { id: passedUserId },
-        data: {
-            ...validatedUser
-        }
+        data: { ...validatedUser }
     })
 
     return user

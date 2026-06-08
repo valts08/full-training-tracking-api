@@ -38,19 +38,27 @@ const createWorkout = async (workoutData: CreateWorkoutType) => {
 }
 
 const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) => {
-    const validWorkout = toWorkoutUpdateInput(zodValidation.validateWorkoutUpdate.parse(workoutData))
-
     const workoutExists = await prisma.workout.findUnique({
         where: { id: workoutId }
     })
-
+    
     if (!workoutExists) throw new Error(`Workout doesn't exist, check the passed ID`)
+    
+    const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutData)
+    const { exerciseIds, ...validWorkoutObject } = validWorkout
 
     const updateWorkout = await prisma.workout.update({
         where: { id: workoutId },
         data: {
-            ...validWorkout,
-            modifiedAt: Date.now()
+            ...toWorkoutUpdateInput(validWorkoutObject),
+            modifiedAt: Date.now(),
+            // if the update includes any non falsy values, overwrite the existing ones
+            ...(exerciseIds != null && {
+                workoutExercises: {
+                create: exerciseIds.map((exerciseId: number) => ({
+                    exercise: { connect: { id: exerciseId } }
+                }))
+            }})
         }
     })
 
