@@ -4,7 +4,15 @@ import { prisma } from "../../prisma/prismaClient.ts";
 import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.ts";
 
 const getWorkout = async () => {
-    const workouts = await prisma.workout.findMany()
+    const workouts = await prisma.workout.findMany({
+        include: {
+            workoutExercises: {
+                select: {
+                    exercise: true
+                }
+            }
+        }
+    })
     return workouts
 }
 
@@ -52,13 +60,15 @@ const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) 
         data: {
             ...toWorkoutUpdateInput(validWorkoutObject),
             modifiedAt: Date.now(),
-            // if the update includes any non falsy values, overwrite the existing ones
+            // if exerciseIds have expected values for related exercises, overwrite the existing ones
             ...(exerciseIds != null && {
                 workoutExercises: {
-                create: exerciseIds.map((exerciseId: number) => ({
-                    exercise: { connect: { id: exerciseId } }
-                }))
-            }})
+                    deleteMany: {},
+                    create: exerciseIds.map((exerciseId: number) => ({
+                        exercise: { connect: { id: exerciseId } }
+                    }))
+                }
+            })
         }
     })
 
