@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
 import exerciseService from '../services/exercise.service.ts'
-// import exercises from '../data/exerciseMock.ts'
 
 
 const getExercises = async (req: Request, res: Response, next: NextFunction) => {
