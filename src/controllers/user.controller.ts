@@ -9,13 +9,11 @@ const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const userRequestBody = req.body
-    const passedUserId = req.params.id as unknown as number
+    const passedUserId = Number(req.params.id)
     
-    const { foundUser, zoddedUser } = await userService.updateUser(users, userRequestBody, passedUserId)
+    const newUser = await userService.updateUser(userRequestBody, passedUserId)
 
-    users[foundUser] = zoddedUser
-
-    return res.status(200).send({ user: users[foundUser], message: "User successfully updated" })
+    return res.status(200).json({ newUser, message: "User successfully updated" })
 }
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,19 +23,15 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const newUser = await userService.createUser(userRequestBody)
 
-    return res.status(201).send({ newUser, message: "User successfully created" })
+    return res.status(201).json({ newUser, message: "User successfully created" })
 }
 
-const deleteUser = (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.id
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = Number(req.params.id)
 
-    const userToDelete = users.findIndex(user => user.id === userId)
+    const deletedUser = await userService.deleteUser(userId)
 
-    if (userToDelete === -1) return res.status(404).json({ message: "User Id not found" })
-
-    const deletedUser = users.splice(userToDelete, 1)
-
-    return res.status(200).send({ user: deletedUser, message: "User successfully deleted" })
+    return res.status(200).json({ user: deletedUser, message: "User successfully deleted" })
 }
 
 export default {

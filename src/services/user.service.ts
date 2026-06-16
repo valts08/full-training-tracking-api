@@ -1,24 +1,25 @@
-import zodValidation from '../validation/validateUser.ts'
-import type { UserCreateType, UserUpdateType } from "../validation/validateUser.ts";
+import zodValidation from '../helpers/validation/validateUser.ts'
+import type { User } from "../helpers/validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
+import AppError from '../helpers/appErrorClass.ts';
 
 const getUsers = async () => {
     const users = await prisma.user.findMany()
     return users
 }
 
-const createUser = async (data: UserCreateType) => {
+const createUser = async (data: User) => {
     const { username } = data
     
-    if (!username) throw new Error("Error: user ID or username missing, check the request body")
+    if (!username) throw new AppError("Error: user ID or username missing, check the request body", 404)
 
     const usernameExists = await prisma.user.findFirst({
         where: { username }
     })
 
-    if (usernameExists) throw new Error("User with that username already exists")
+    if (usernameExists) throw new AppError("User with that username already exists", 404)
 
-    const newUser = zodValidation.createUserNoId.parse(data)
+    const newUser = zodValidation.validateUser.parse(data)
 
     const user = await prisma.user.create({
         data: { ...newUser }
@@ -27,29 +28,42 @@ const createUser = async (data: UserCreateType) => {
     return user
 }
 
-const updateUser = (users: UserCreateType[] | UserUpdateType[], data: UserCreateType | UserUpdateType, passedUserId: number) => {
+const updateUser = async (data: User, passedUserId: number) => {
 
-    const foundUser = users.findIndex(user => user.id === passedUserId)
+    const foundUser = await prisma.user.findFirst({
+        where: { id: passedUserId }
+    })
 
-    if (foundUser === -1) throw new Error("The user you wanted to edit was not found")
+    if (!foundUser) throw new AppError("The user you wanted to edit was not found", 404)
+        
+    const validatedUser = zodValidation.validateUser.parse(data)
 
-    const objectToValidate = {
-        id: users[foundUser]?.id, 
-        username: data.username
-    }
+    const user = await prisma.user.update({
+        where: { id: passedUserId },
+        data: { ...validatedUser }
+    })
 
-    const zoddedUser = zodValidation.updateUser.parse(objectToValidate)
-
-    return { foundUser, zoddedUser }
+    return user
 }
 
-const deleteUsers = async () => {
+const deleteUser = async (userId: number) => {
     
+    const userToDelete = await prisma.user.findFirst({
+        where: { id: userId }
+    })
+
+    if (!userToDelete) throw new AppError( "User Id not found", 404)
+
+    const deletedUser = await prisma.user.delete({
+        where: { id: userId }
+    })
+
+    return deletedUser
 }
 
 export default {
     getUsers,
     createUser,
     updateUser,
-    deleteUsers
+    deleteUser
 }

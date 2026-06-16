@@ -11,7 +11,6 @@ const repRangeZod = z.object({
 })
 
 const strengthExercise = z.object({
-  id: z.number(),
   name: z.string(),
   muscleGroups: muscleGroupZod,
   category: z.literal("strength"),
@@ -29,7 +28,6 @@ const strengthExercise = z.object({
 })
 
 const isoStrengthExercise = z.object({
-  id: z.number(),
   name: z.string(),
   muscleGroups: muscleGroupZod,
   category: z.literal("isometric strength"),
@@ -50,7 +48,6 @@ const isoStrengthExercise = z.object({
 })
 
 const cardioExercise = z.object({
-  id: z.number(),
   name: z.string(),
   muscleGroups: muscleGroupZod,
   category: z.literal("cardio"),
@@ -75,7 +72,6 @@ const cardioExercise = z.object({
 })
 
 const plyoExercise = z.object({
-  id: z.number(),
   name: z.string(),
   muscleGroups: muscleGroupZod,
   category: z.literal("plyometrics"),
@@ -101,10 +97,10 @@ const exerciseValidation = z.discriminatedUnion("category", [
 
 // for the update zod validation schema, find a way to exclude being able to update the ID, currently it's possible
 const updateExerciseValidation = z.discriminatedUnion("category", [
-  strengthExercise.omit({ id: true }).partial().required({ category: true }),
-  isoStrengthExercise.omit({ id: true }).partial().required({ category: true }),
-  cardioExercise.omit({ id: true }).partial().required({ category: true }),
-  plyoExercise.omit({ id: true }).partial().required({ category: true })
+  strengthExercise.partial().required({ category: true }),
+  isoStrengthExercise.partial().required({ category: true }),
+  cardioExercise.partial().required({ category: true }),
+  plyoExercise.partial().required({ category: true })
 ])
 
 export type CreateExercise = z.infer<typeof exerciseValidation>
