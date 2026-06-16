@@ -11,6 +11,10 @@ const getWorkoutById = async (req: Request, res: Response, next: NextFunction) =
 
     const workout = await workoutService.getWorkoutById(workoutId)
 
+    if (workout == null) {
+        return res.status(404).json({ message: `Workout with ID ${workoutId} not found` })
+    }
+
     return res.status(200).json({ workout, message: "Workout found successfully" })
 }
 

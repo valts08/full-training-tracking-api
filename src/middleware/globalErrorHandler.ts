@@ -1,10 +1,16 @@
 import type { Request, Response, NextFunction } from 'express'
+import AppError from '../helpers/appErrorClass.ts';
 import { ZodError } from 'zod'
 import { PrismaClientInitializationError, PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.ts';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
     let error;
+
+    if (err instanceof AppError) {
+        return res.status(err.statusCode).json({ error: err.message })
+    }
+
     if (err instanceof ZodError) {
             error = err.issues.map(i => ({
             field: i.path.join(''),

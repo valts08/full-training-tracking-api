@@ -1,6 +1,7 @@
 import zodValidation from '../helpers/validation/validateUser.ts'
 import type { User } from "../helpers/validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
+import AppError from '../helpers/appErrorClass.ts';
 
 const getUsers = async () => {
     const users = await prisma.user.findMany()
@@ -10,13 +11,13 @@ const getUsers = async () => {
 const createUser = async (data: User) => {
     const { username } = data
     
-    if (!username) throw new Error("Error: user ID or username missing, check the request body")
+    if (!username) throw new AppError("Error: user ID or username missing, check the request body", 404)
 
     const usernameExists = await prisma.user.findFirst({
         where: { username }
     })
 
-    if (usernameExists) throw new Error("User with that username already exists")
+    if (usernameExists) throw new AppError("User with that username already exists", 404)
 
     const newUser = zodValidation.validateUser.parse(data)
 
@@ -33,7 +34,7 @@ const updateUser = async (data: User, passedUserId: number) => {
         where: { id: passedUserId }
     })
 
-    if (!foundUser) throw new Error("The user you wanted to edit was not found")
+    if (!foundUser) throw new AppError("The user you wanted to edit was not found", 404)
         
     const validatedUser = zodValidation.validateUser.parse(data)
 
@@ -51,7 +52,7 @@ const deleteUser = async (userId: number) => {
         where: { id: userId }
     })
 
-    if (!userToDelete) throw new Error( "User Id not found")
+    if (!userToDelete) throw new AppError( "User Id not found", 404)
 
     const deletedUser = await prisma.user.delete({
         where: { id: userId }

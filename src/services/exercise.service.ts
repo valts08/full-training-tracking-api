@@ -1,5 +1,6 @@
 import zodValidation from '../helpers/validation/validateExercise.ts'
 import type { CreateExercise, UpdateExercise } from '../helpers/validation/validateExercise.ts'
+import AppError from '../helpers/appErrorClass.ts'
 import { toCreateExerciseInput, toUpdateExerciseInput } from '../helpers/mappers/exercise.mapper.ts'
 import { prisma } from '../../prisma/prismaClient.ts'
 
@@ -27,7 +28,7 @@ const updateExercise = async (dataBody: UpdateExercise, passedExerciseId: number
         where: { id: passedExerciseId }
     })
 
-    if (!exerciseToUpdate) throw new Error(`Couldn't find exercise to update, make sure you have the right ID`)
+    if (!exerciseToUpdate) throw new AppError(`Couldn't find exercise to update, make sure you have the right ID`, 404)
 
     const validExercise = zodValidation.updateExerciseValidation.parse(dataBody)
     const exercise = await prisma.exercise.update({
@@ -47,7 +48,7 @@ const deleteExercise = async (userId: number) => {
         where: { id: userId }
     })
 
-    if (!exerciseToDelete) throw new Error(`Didn't find exercise with ID ${userId}`)
+    if (!exerciseToDelete) throw new AppError(`Didn't find exercise with ID ${userId}`, 404)
     
     const deletedExercise = await prisma.exercise.delete({
         where: { id: userId }

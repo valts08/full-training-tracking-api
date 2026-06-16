@@ -12,8 +12,6 @@ const validateSeedWorkoutData = z.object({
     durationMinutes: z.number(),
     difficulty: z.string().max(20),
     exerciseIds: z.array(z.number()).min(1),
-    createdAt: z.float64(),
-    modifiedAt: z.float64(),
     notes: z.string(),
     title: z.string().max(255)
 })

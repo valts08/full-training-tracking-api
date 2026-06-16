@@ -1,5 +1,6 @@
 import type { CreateWorkoutType, UpdateWorkoutType } from "../helpers/validation/validateWorkout.ts";
 import zodValidation from "../helpers/validation/validateWorkout.ts";
+import AppError from "../helpers/appErrorClass.ts";
 import { prisma } from "../../prisma/prismaClient.ts";
 import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.ts";
 
@@ -7,9 +8,7 @@ const getWorkout = async () => {
     const workouts = await prisma.workout.findMany({
         include: {
             workoutExercises: {
-                select: {
-                    exercise: true
-                }
+                select: { exercise: true }
             }
         }
     })
@@ -17,8 +16,13 @@ const getWorkout = async () => {
 }
 
 const getWorkoutById = async (id: number) => {
-    const workouts = await prisma.workout.findFirst({
-        where: { id }
+    const workouts = await prisma.workout.findUnique({
+        where: { id },
+        include: {
+            workoutExercises: {
+                select: { exercise: true }
+            }
+        }
     })
 
     return workouts
@@ -32,8 +36,6 @@ const createWorkout = async (workoutData: CreateWorkoutType) => {
     const workout = await prisma.workout.create({
         data: {
             ...toWorkoutInput(validWorkoutObject),
-            createdAt: Date.now(),
-            modifiedAt: Date.now(),
             workoutExercises: {
                 create: exerciseIds.map((exerciseId: number) => ({
                     exercise: { connect: { id: exerciseId } }
@@ -50,7 +52,7 @@ const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) 
         where: { id: workoutId }
     })
     
-    if (!workoutExists) throw new Error(`Workout doesn't exist, check the passed ID`)
+    if (!workoutExists) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
     
     const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutData)
     const { exerciseIds, ...validWorkoutObject } = validWorkout
@@ -59,7 +61,6 @@ const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) 
         where: { id: workoutId },
         data: {
             ...toWorkoutUpdateInput(validWorkoutObject),
-            modifiedAt: Date.now(),
             // if exerciseIds have expected values for related exercises, overwrite the existing ones
             ...(exerciseIds != null && {
                 workoutExercises: {
@@ -80,7 +81,7 @@ const deleteWorkout = async (workoutId: number) => {
         where: { id: workoutId }
     })
 
-    if (!workoutExists) throw new Error(`Workout doesn't exist, check the passed ID`)
+    if (!workoutExists) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
 
     const deletedWorkout = await prisma.workout.delete({
         where: { id: workoutId }

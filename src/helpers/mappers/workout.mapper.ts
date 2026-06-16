@@ -30,8 +30,6 @@ export const toWorkoutCreateManyInput = (workout: SeedWorkoutBaseType): WorkoutC
     const base = {
         durationMinutes: workout.durationMinutes,
         difficulty: workout.difficulty,
-        createdAt: workout.createdAt,
-        modifiedAt: workout.modifiedAt,
         notes: workout.notes,
         title: workout.title
     }

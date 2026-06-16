@@ -17,8 +17,6 @@ const workouts = [
       difficulty: "medium",
       exerciseIds: [1, 2],
       notes: "Felt strong, increased weight on squats.",
-      createdAt: Date.now(),
-      modifiedAt: Date.now()
     },
     {
       title: "Leg Day",
@@ -26,8 +24,6 @@ const workouts = [
       difficulty: "hard",
       exerciseIds: [1, 4],
       notes: "Box jumps after squats was brutal.",
-      createdAt: Date.now(),
-      modifiedAt: Date.now()
     },
     {
       title: "Active Recovery",
@@ -35,8 +31,6 @@ const workouts = [
       difficulty: "easy",
       exerciseIds: [3],
       notes: "Easy tempo run, kept HR below 150.",
-      createdAt: Date.now(),
-      modifiedAt: Date.now()
     },
     {
       title: "Full Body Strength",
@@ -44,8 +38,6 @@ const workouts = [
       difficulty: "hard",
       exerciseIds: [1, 2, 4],
       notes: "",
-      createdAt: Date.now(),
-      modifiedAt: Date.now()
     }
   ]
 

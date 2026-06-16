@@ -14,8 +14,8 @@ generator client {
 
 model Workout {
   id                  Int         @id @default(autoincrement())
-  createdAt           Float
-  modifiedAt          Float
+  createdAt           DateTime    @default(now())
+  modifiedAt          DateTime    @updatedAt
   durationMinutes     Int
   difficulty          String      @db.VarChar(20)
   notes               String      @db.Text
