@@ -55,6 +55,8 @@ model WorkoutExercise {
 
 model User {
   id                  Int       @id @default(autoincrement())
+  email               String    @db.Text @unique
+  passwordHash        String    @db.VarChar(60)
   exercises           Exercise[]
   username            String    @db.VarChar(100)
 }

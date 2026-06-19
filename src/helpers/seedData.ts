@@ -1,12 +1,18 @@
 const users = [
     {
-      username: "valts"
+      username: "valts",
+      email: "valts.p@ggg.gb",
+      passwordHash: "$2b$10$nOUIs5kJ7naTuTFkBy1veuK0kSxUFXfuaOKdOKf9xYT0KKIGSJwFa"
     },
     {
-      username: "john_doe"
+      username: "john_doe",
+      email: "john_doe@gmail.com",
+      passwordHash: "$2b$10$nOUIs5kJ7naTuTFkBy1veuK0kSxUFXfuaOKdOKf9xYT0KKIGSJwFa"
     },
     {
-      username: "jane_smith"
+      username: "jane_smith",
+      email: "jjanes@yh.com",
+      passwordHash: "$2b$10$nOUIs5kJ7naTuTFkBy1veuK0kSxUFXfuaOKdOKf9xYT0KKIGSJwFa"
     }
 ]
   
