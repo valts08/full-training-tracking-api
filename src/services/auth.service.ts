@@ -50,10 +50,9 @@ const loginUser = async (userObject: AuthUser) => {
 
     if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
 
-    jwt.sign({ username, email }, jwtSecret, { expiresIn: 20 }, (err) => {
-        console.log(err)
-        if (err) throw new AppError('Invalid credentials', 401)
-    })
+    const jwtToken = jwt.sign({ username, email }, jwtSecret, { expiresIn: 20 })
+
+    return jwtToken
 }
 
 export default {

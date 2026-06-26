@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import authService from "../services/auth.service.ts";
+import { jwt } from "zod";
 
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     const requestObject = req.body
@@ -12,9 +13,9 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const requestObject = req.body
 
-    await authService.loginUser(requestObject)
+    const jwtToken = await authService.loginUser(requestObject)
 
-    return res.status(200).json({ message: "User successfully logged in" })
+    return res.status(200).json({ token: jwtToken, message: "User successfully logged in" })
 }
 
 export default {
