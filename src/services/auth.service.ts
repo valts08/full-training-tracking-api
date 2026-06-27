@@ -1,4 +1,4 @@
-import "../config/index.ts";
+import { config } from "../config/index.ts";
 import { prisma } from "../../prisma/prismaClient.ts";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -6,11 +6,6 @@ import userService from "./user.service.ts";
 import type { AuthUser } from "../helpers/validation/validateAuth.ts";
 import zodAuthValidation from "../helpers/validation/validateAuth.ts";
 import AppError from "../helpers/appErrorClass.ts";
-
-const jwtSecret = process.env.JWT_SECRET ?? (() => {
-    throw new Error("JWT_SECRET missing");
-})();
-// did it this way because when signing the JWT token, it expects the secret to be available. this is for typescript to know that an error will be thrown in the cases it isn't available
 
 const registerUser = async (userObject: AuthUser) => {
     const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
@@ -50,7 +45,7 @@ const loginUser = async (userObject: AuthUser) => {
 
     if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
 
-    const jwtToken = jwt.sign({ username, email }, jwtSecret, { expiresIn: 20 })
+    const jwtToken = jwt.sign({ username, email }, config.jwtSecret, { expiresIn: 20 })
 
     return jwtToken
 }

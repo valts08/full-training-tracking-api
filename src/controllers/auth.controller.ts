@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import authService from "../services/auth.service.ts";
-import { jwt } from "zod";
 
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     const requestObject = req.body

@@ -1,5 +1,5 @@
-import express from 'express'
 import '../src/config/index.ts'
+import express from 'express'
 import authRouter from '../src/routes/auth.ts'
 import userRouter from '../src/routes/user.ts'
 import workoutRouter from '../src/routes/workout.ts'
