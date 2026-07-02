@@ -4,14 +4,20 @@ import { config } from "../config/index.ts";
 import jwt from "jsonwebtoken";
 
 
-export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
-    const authToken = req.headers.authorization?.split(' ')[1]
+export const authenticateRequest = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authToken = req.headers.authorization?.split(' ')[1]
+        if (!authToken) throw new AppError('No Authorization header received', 401)
+        
+        const decoded = jwt.verify(authToken, config.jwtSecret)
+        
+        if (typeof decoded === 'string' || !decoded.id || !decoded.email) {
+            throw new AppError('Invalid Auth token', 401)
+        }
 
-    if (!authToken) throw new AppError('No Authorization header received', 401)
-
-    const isValidJWT = await jwt.verify(authToken, config.jwtSecret)
-
-    if (!isValidJWT) throw new AppError('Invalid Auth token', 401)
-    
-    next();
+        req.user = { id: decoded.id, email: decoded.email }
+        next();
+    } catch (err) {
+        next(err);
+    }
 }

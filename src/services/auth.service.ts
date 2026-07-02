@@ -28,24 +28,26 @@ const registerUser = async (userObject: AuthUser) => {
 const loginUser = async (userObject: AuthUser) => {
     const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
 
-    const { username, email, password } = validatedUserAuthObject
+    const { email, password } = validatedUserAuthObject
 
-    const userHash = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
         where: {
             email
         },
         select: {
-            passwordHash: true
+            passwordHash: true,
+            id: true,
+            email: true
         }
     })
 
-    if (!userHash) throw new AppError('Invalid credentials', 409)
+    if (!user) throw new AppError('Invalid credentials', 409)
     
-    const correctPassword = await bcrypt.compare(password, userHash.passwordHash)
+    const correctPassword = await bcrypt.compare(password, user.passwordHash)
 
     if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
 
-    const jwtToken = jwt.sign({ username, email }, config.jwtSecret, { expiresIn: 20 })
+    const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 20 })
 
     return jwtToken
 }
