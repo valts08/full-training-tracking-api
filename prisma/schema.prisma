@@ -20,6 +20,8 @@ model Workout {
   difficulty          String      @db.VarChar(20)
   notes               String      @db.Text
   title               String      @db.VarChar(255)
+  userId              Int         
+  user                User        @relation(fields: [userId], references: [id])
   workoutExercises    WorkoutExercise[]
 }
 
@@ -58,5 +60,7 @@ model User {
   email               String    @db.Text @unique
   passwordHash        String    @db.VarChar(60)
   exercises           Exercise[]
+  workouts            Workout[]
+  isAdmin             Boolean   @default(false)
   username            String    @db.VarChar(100)
 }

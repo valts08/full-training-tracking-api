@@ -5,7 +5,8 @@ const validateWorkout = z.object({
     difficulty: z.string().max(20),
     exerciseIds: z.array(z.number()).min(1),
     notes: z.string(),
-    title: z.string().max(255)
+    title: z.string().max(255),
+    userId: z.number()
 })
 
 const validateSeedWorkoutData = z.object({

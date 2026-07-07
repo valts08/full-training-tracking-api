@@ -47,7 +47,7 @@ const loginUser = async (userObject: AuthUser) => {
 
     if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
 
-    const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 20 })
+    const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 60 })
 
     return jwtToken
 }

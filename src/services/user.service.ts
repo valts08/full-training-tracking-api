@@ -3,7 +3,15 @@ import type { User } from "../helpers/validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
 import AppError from '../helpers/appErrorClass.ts';
 
-const getUsers = async () => {
+const getUser = async (userId: number) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId}
+    })
+    
+    return user
+}
+
+const getAdminUsers = async () => {
     const users = await prisma.user.findMany()
     return users
 }
@@ -66,7 +74,8 @@ const deleteUser = async (userId: number) => {
 
 
 export default {
-    getUsers,
+    getUser,
+    getAdminUsers,
     createUser,
     updateUser,
     deleteUser
