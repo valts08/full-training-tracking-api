@@ -6,6 +6,7 @@ type SeedWorkoutBaseType = Omit<CreateSeedWorkoutType, 'exerciseIds'>
 
 export const toWorkoutInput = (workout: WorkoutBaseType): WorkoutUncheckedCreateInput => {
     const base = {
+        userId: workout.userId,
         durationMinutes: workout.durationMinutes,
         difficulty: workout.difficulty,
         notes: workout.notes,
@@ -17,6 +18,7 @@ export const toWorkoutInput = (workout: WorkoutBaseType): WorkoutUncheckedCreate
 
 export const toWorkoutUpdateInput = (workout: UpdateWorkoutType): WorkoutUncheckedUpdateInput => {
     const base = {
+        userId: workout.userId,
         durationMinutes: workout.durationMinutes,
         difficulty: workout.difficulty,
         notes: workout.notes,

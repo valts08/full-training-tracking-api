@@ -1,13 +1,21 @@
 import type { Response, Request, NextFunction } from 'express'
 import userService from '../services/user.service.ts'
+import AppError from '../helpers/appErrorClass.ts'
 
-const getUsers = async (req: Request, res: Response, next: NextFunction) => {
-    const users = await userService.getUsers()
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) throw new AppError("Unauthorized user", 401)
+    
+    const userId = req.user.id
+    const users = await userService.getUser(userId)
+    return res.status(200).json({ users })
+}
+
+const getAdminUsers = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await userService.getAdminUsers()
     return res.status(200).json({ users })
 }
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
-
     const userRequestBody = req.body
     const passedUserId = Number(req.params.id)
     
@@ -35,7 +43,8 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export default {
-    getUsers,
+    getUser,
+    getAdminUsers,
     updateUser,
     createUser,
     deleteUser

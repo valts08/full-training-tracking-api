@@ -1,5 +1,6 @@
-import express from 'express'
 import '../src/config/index.ts'
+import express from 'express'
+import authRouter from '../src/routes/auth.ts'
 import userRouter from '../src/routes/user.ts'
 import workoutRouter from '../src/routes/workout.ts'
 import exerciseRouter from '../src/routes/exercise.ts'
@@ -20,6 +21,7 @@ app.use(cors({
   "optionsSuccessStatus": 204
 }))
 
+app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/workout', workoutRouter)
 app.use('/exercise', exerciseRouter)

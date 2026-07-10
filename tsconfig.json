@@ -40,7 +40,11 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
+    // "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "files": [
+    "./src/types/express/express.d.ts"
+  ],
+  "include": ["src/**/*"]
 }

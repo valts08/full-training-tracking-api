@@ -1,8 +1,11 @@
 import type { Response, Request, NextFunction } from 'express';
 import workoutService from '../services/workout.service.ts';
+import AppError from '../helpers/appErrorClass.ts';
 
 const getWorkouts = async (req: Request, res: Response, next: NextFunction) => {
-    const workouts = await workoutService.getWorkout()
+    if (!req.user) throw new AppError('Unauthorized user', 401)
+    const workouts = await workoutService.getWorkout(req.user.id)
+
     return res.status(200).json({ workouts })
 }
 
@@ -19,7 +22,9 @@ const getWorkoutById = async (req: Request, res: Response, next: NextFunction) =
 }
 
 const createWorkout = async (req: Request, res: Response, next: NextFunction) => {
-    const workoutDataObject = req.body
+    if (!req.user) throw new AppError('User not Authorized', 401)
+        
+    const workoutDataObject = { ...req.body, userId: req.user.id }
 
     const workout = await workoutService.createWorkout(workoutDataObject)
 
@@ -27,9 +32,10 @@ const createWorkout = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 const updateWorkout = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) throw new AppError("User not authorized", 401)
     const workoutId = Number(req.params.id)
-    const workoutDataObject = req.body
-
+    const workoutDataObject = { ...req.body, userId: req.user.id}
+    
     const workout = await workoutService.updateWorkout(workoutDataObject, workoutId)
 
     return res.status(200).json({ workout, message: "Workout updated successfully" })

@@ -4,8 +4,9 @@ import AppError from "../helpers/appErrorClass.ts";
 import { prisma } from "../../prisma/prismaClient.ts";
 import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.ts";
 
-const getWorkout = async () => {
+const getWorkout = async (userId: number) => {
     const workouts = await prisma.workout.findMany({
+        where: { userId },
         include: {
             workoutExercises: {
                 select: { exercise: true }
@@ -48,13 +49,17 @@ const createWorkout = async (workoutData: CreateWorkoutType) => {
 }
 
 const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) => {
-    const workoutExists = await prisma.workout.findUnique({
+    const { userId, ...workoutUpdateData } = workoutData
+    if (userId == undefined) throw new AppError('User not authorized', 401)
+        
+    const workout = await prisma.workout.findUnique({
         where: { id: workoutId }
     })
+    if (!workout) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
+
+    if (workout.userId !== userId) throw new AppError("Can't update this workout, unauthorized user", 403)
     
-    if (!workoutExists) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
-    
-    const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutData)
+    const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutUpdateData)
     const { exerciseIds, ...validWorkoutObject } = validWorkout
 
     const updateWorkout = await prisma.workout.update({

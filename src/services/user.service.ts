@@ -3,7 +3,15 @@ import type { User } from "../helpers/validation/validateUser.ts";
 import { prisma } from '../../prisma/prismaClient.ts';
 import AppError from '../helpers/appErrorClass.ts';
 
-const getUsers = async () => {
+const getUser = async (userId: number) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId}
+    })
+    
+    return user
+}
+
+const getAdminUsers = async () => {
     const users = await prisma.user.findMany()
     return users
 }
@@ -17,6 +25,8 @@ const createUser = async (data: User) => {
         where: { username }
     })
 
+    // I think I'll remove these username checks completely, or change the logic here, since all requests go though auth service first
+    // different emails but same username will make this fail - will need to change this
     if (usernameExists) throw new AppError("User with that username already exists", 404)
 
     const newUser = zodValidation.validateUser.parse(data)
@@ -61,8 +71,11 @@ const deleteUser = async (userId: number) => {
     return deletedUser
 }
 
+
+
 export default {
-    getUsers,
+    getUser,
+    getAdminUsers,
     createUser,
     updateUser,
     deleteUser

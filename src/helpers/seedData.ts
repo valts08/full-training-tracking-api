@@ -1,12 +1,19 @@
 const users = [
     {
-      username: "valts"
+      username: "valts",
+      email: "valts.p@ggg.gb",
+      isAdmin: true,
+      passwordHash: "$2b$10$xiosBQB4Wf60ZY2lbWMw5.Sg1pQ/1sVs6kEkW/k.KPdxKXOzpkvIu"
     },
     {
-      username: "john_doe"
+      username: "john_doe",
+      email: "john_doe@gmail.com",
+      passwordHash: "$2b$10$nOUIs5kJ7naTuTFkBy1veuK0kSxUFXfuaOKdOKf9xYT0KKIGSJwFa"
     },
     {
-      username: "jane_smith"
+      username: "jane_smith",
+      email: "jjanes@yh.com",
+      passwordHash: "$2b$10$nOUIs5kJ7naTuTFkBy1veuK0kSxUFXfuaOKdOKf9xYT0KKIGSJwFa"
     }
 ]
   
@@ -17,6 +24,7 @@ const workouts = [
       difficulty: "medium",
       exerciseIds: [1, 2],
       notes: "Felt strong, increased weight on squats.",
+      userId: 1
     },
     {
       title: "Leg Day",
@@ -24,6 +32,7 @@ const workouts = [
       difficulty: "hard",
       exerciseIds: [1, 4],
       notes: "Box jumps after squats was brutal.",
+      userId: 1
     },
     {
       title: "Active Recovery",
@@ -31,6 +40,7 @@ const workouts = [
       difficulty: "easy",
       exerciseIds: [3],
       notes: "Easy tempo run, kept HR below 150.",
+      userId: 2
     },
     {
       title: "Full Body Strength",
@@ -38,6 +48,7 @@ const workouts = [
       difficulty: "hard",
       exerciseIds: [1, 2, 4],
       notes: "",
+      userId: 3
     }
   ]
 
