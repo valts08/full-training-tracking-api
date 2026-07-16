@@ -1,4 +1,4 @@
-import { rateLimit } from "express-rate-limit";
+import { ipKeyGenerator, rateLimit } from "express-rate-limit";
 import type { Request } from "express";
 
 export const authLimiter = rateLimit({
@@ -14,9 +14,9 @@ export const authLimiter = rateLimit({
             console.warn('User IP value req.ip unknown, needs investigation')
             return 'unknown'
         }
-        return req.ip
-    },
-    ipv6Subnet: 56,
+        const ipv6Subnet = 56
+        return ipKeyGenerator(req.ip, ipv6Subnet) 
+    }
 })
 
 export const writeLimiter = rateLimit({
@@ -32,9 +32,9 @@ export const writeLimiter = rateLimit({
             console.warn('User IP value req.ip unknown, needs investigation')
             return 'unknown'
         }
-        return req.ip
-    },
-    ipv6Subnet: 56,
+        const ipv6Subnet = 56
+        return ipKeyGenerator(req.ip, ipv6Subnet) 
+    }
 })
 
 export const readLimiter = rateLimit({
@@ -50,7 +50,8 @@ export const readLimiter = rateLimit({
             console.warn('User IP value req.ip unknown, needs investigation')
             return 'unknown'
         }
-        return req.ip
-    },
-    ipv6Subnet: 56,
+        // if there is a custom implementation for the key generator then the ipv6subnet value needs to be passed ot the ipkeygenerator func
+        const ipv6Subnet = 56
+        return ipKeyGenerator(req.ip, ipv6Subnet) 
+    }
 })
