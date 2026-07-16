@@ -1,6 +1,5 @@
 import '../src/config/index.ts'
 import seedData from '../src/helpers/seedData.ts'
-import { toWorkoutCreateManyInput } from '../src/helpers/mappers/workout.mapper.ts';
 import { prisma } from "./prismaClient.ts";
 
 const seedDatabase = async () => {

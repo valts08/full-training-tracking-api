@@ -1,8 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import authService from "../services/auth.service.ts";
+import { emailValidator } from "../helpers/validation/controllerInputValidation.ts";
+import AppError from "../helpers/appErrorClass.ts";
 
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
-    const requestObject = req.body
+    const { email, ...other } = req.body
+    if (!emailValidator(email)) throw new AppError('Invalid email', 400)
+
+    const requestObject = { email, ...other }
 
     await authService.registerUser(requestObject)
 
