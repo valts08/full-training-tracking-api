@@ -27,14 +27,3 @@ export const toWorkoutUpdateInput = (workout: UpdateWorkoutType): WorkoutUncheck
 
     return { ...base } as unknown as WorkoutUncheckedUpdateInput
 }
-
-export const toWorkoutCreateManyInput = (workout: SeedWorkoutBaseType): WorkoutCreateManyInput => {
-    const base = {
-        durationMinutes: workout.durationMinutes,
-        difficulty: workout.difficulty,
-        notes: workout.notes,
-        title: workout.title
-    }
-
-    return { ...base } as unknown as WorkoutCreateManyInput
-}
