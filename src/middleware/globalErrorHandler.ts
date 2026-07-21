@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express'
 import AppError from '../helpers/appErrorClass.ts';
 import { ZodError } from 'zod'
 import { PrismaClientInitializationError, PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.ts';
+import { PrismaClientValidationError } from '@prisma/client/runtime/client';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
@@ -39,7 +40,16 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
         return res.status(400).json({ error })
     }
 
-    return res.status(400).json({ error: err.message })
-}
+    if (err instanceof PrismaClientValidationError) {
+        error = {
+            error: err,
+            message: err.message
+        }
+        
+        return res.status(400).json({ error })
+    }
 
+    return res.status(400).json({ error: err, random: '123' })
+}
+    
 export default errorHandler

@@ -16,9 +16,9 @@ const getWorkout = async (userId: number) => {
     return workouts
 }
 
-const getWorkoutById = async (id: number) => {
+const getWorkoutById = async (id: number, userId: number) => {
     const workouts = await prisma.workout.findUnique({
-        where: { id },
+        where: { id, userId },
         include: {
             workoutExercises: {
                 select: { exercise: true }

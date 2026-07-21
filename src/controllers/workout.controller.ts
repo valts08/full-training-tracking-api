@@ -10,12 +10,13 @@ const getWorkouts = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const getWorkoutById = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) throw new AppError('Unauthorized user', 401)
     const workoutId = Number(req.params.id)
 
-    const workout = await workoutService.getWorkoutById(workoutId)
+    const workout = await workoutService.getWorkoutById(workoutId, req.user.id)
 
     if (workout == null) {
-        return res.status(404).json({ message: `Workout with ID ${workoutId} not found` })
+        return res.status(404).json({ message: `Workout with ID ${workoutId} not found for your user` })
     }
 
     return res.status(200).json({ workout, message: "Workout found successfully" })
