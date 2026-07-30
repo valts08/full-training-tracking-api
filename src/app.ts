@@ -21,6 +21,8 @@ app.use(cors({
   "optionsSuccessStatus": 204
 }))
 
+// make sure all zod validation happens at the controller layer, not the service layer
+// move it up a layer wherever necessary
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/workout', workoutRouter)

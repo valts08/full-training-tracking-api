@@ -1,9 +1,13 @@
 import type { Request, Response, NextFunction } from 'express'
+import queryValidation from '../helpers/validation/queryParamValidation.ts'
 import exerciseService from '../services/exercise.service.ts'
 
 
 const getExercises = async (req: Request, res: Response, next: NextFunction) => {
-  const exercises = await exerciseService.getExercises()
+  
+  const queryValues = queryValidation.query.parse(req.query)
+
+  const exercises = await exerciseService.getExercises(queryValues)
   return res.status(200).json({ exercises })
 }
 
