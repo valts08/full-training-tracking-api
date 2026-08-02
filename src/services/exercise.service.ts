@@ -7,12 +7,13 @@ import { prisma } from '../../prisma/prismaClient.ts'
 
 const getExercises = async (queryValues: queryParamType) => {
     const { page, limit, sortBy, order } = queryValues
-    const findExerciseOptions = {
-        where: {
-            
-        }
-    }
-    const exercises = await prisma.exercise.findMany(findExerciseOptions || {})
+    const exercises = await prisma.exercise.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+            [sortBy]: order
+        },
+    })
     return exercises
 }
 
