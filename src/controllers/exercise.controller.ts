@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import queryValidation from '../helpers/validation/queryParamValidation.ts'
+import zodValidation from '../helpers/validation/validateExercise.ts'
 import exerciseService from '../services/exercise.service.ts'
 
 
@@ -14,8 +15,8 @@ const getExercises = async (req: Request, res: Response, next: NextFunction) => 
 const createExercise = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) return res.status(409).json({ message: "Error: Request body not included" })
 
-  const exerciseRequestBody = req.body
-  const exercise = await exerciseService.createExercise(exerciseRequestBody)
+  const validExercise = zodValidation.exerciseValidation.parse(req.body)
+  const exercise = await exerciseService.createExercise(validExercise)
 
   return res.status(201).json({ exercise, message: "New exercise added successfully" })
 }
@@ -23,10 +24,10 @@ const createExercise = async (req: Request, res: Response, next: NextFunction) =
 const updateExercise = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) return res.status(409).json({ message: "Error: Request body not included" })
 
-  const exerciseRequestBody = req.body
+  const validExercise = zodValidation.updateExerciseValidation.parse(req.body)
   const passedExerciseId = Number(req.params.id)
 
-  const exercise = await exerciseService.updateExercise(exerciseRequestBody, passedExerciseId)
+  const exercise = await exerciseService.updateExercise(validExercise, passedExerciseId)
 
   return res.status(200).json({ exercise, message: "Exercise successfully updated" })
 }
