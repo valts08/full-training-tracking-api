@@ -81,15 +81,21 @@ const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) 
     return updateWorkout
 }
 
-const deleteWorkout = async (workoutId: number) => {
+const deleteWorkout = async (workoutId: number, userId: number) => {
     const workoutExists = await prisma.workout.findUnique({
-        where: { id: workoutId }
+        where: { 
+            id: workoutId,
+            userId
+        }
     })
 
     if (!workoutExists) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
 
     const deletedWorkout = await prisma.workout.delete({
-        where: { id: workoutId }
+        where: { 
+            id: workoutId,
+            userId
+        }
     })
 
     return deletedWorkout

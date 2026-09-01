@@ -1,8 +1,7 @@
-import type { WorkoutUncheckedCreateInput, WorkoutUncheckedUpdateInput, WorkoutCreateManyInput } from "../../generated/prisma/models.ts";
-import type { CreateWorkoutType, UpdateWorkoutType, CreateSeedWorkoutType } from "../validation/validateWorkout.ts";
+import type { WorkoutUncheckedCreateInput, WorkoutUncheckedUpdateInput } from "../../generated/prisma/models.ts";
+import type { CreateWorkoutType, UpdateWorkoutType } from "../validation/validateWorkout.ts";
 
 type WorkoutBaseType = Omit<CreateWorkoutType, 'exerciseIds'>
-type SeedWorkoutBaseType = Omit<CreateSeedWorkoutType, 'exerciseIds'>
 
 export const toWorkoutInput = (workout: WorkoutBaseType): WorkoutUncheckedCreateInput => {
     const base = {

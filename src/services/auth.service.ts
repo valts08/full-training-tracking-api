@@ -45,7 +45,7 @@ const loginUser = async (userObject: AuthUser) => {
     
     const correctPassword = await bcrypt.compare(password, user.passwordHash)
 
-    if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
+    if (!correctPassword) throw new AppError('Incorrect credentials', 409)
 
     const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 300 })
 

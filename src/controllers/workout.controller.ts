@@ -43,9 +43,11 @@ const updateWorkout = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 const deleteWorkout = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) throw new AppError("User not authorized", 401)
+    const userId = req.user.id
     const workoutId = Number(req.params.id)
 
-    const deletedWorkout = await workoutService.deleteWorkout(workoutId)
+    const deletedWorkout = await workoutService.deleteWorkout(workoutId, userId)
 
     return res.status(200).json({ deletedWorkout, message: "Workout deleted successfully" })
 }
