@@ -1,5 +1,6 @@
 import type { Response, Request, NextFunction } from 'express'
 import userService from '../services/user.service.ts'
+import zodValidation from '../helpers/validation/validateUser.ts'
 import AppError from '../helpers/appErrorClass.ts'
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,10 +17,10 @@ const getAdminUsers = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const userRequestBody = req.body
+    const validUser = zodValidation.validateUser.parse(req.body)
     const passedUserId = Number(req.params.id)
     
-    const newUser = await userService.updateUser(userRequestBody, passedUserId)
+    const newUser = await userService.updateUser(validUser, passedUserId)
 
     return res.status(200).json({ newUser, message: "User successfully updated" })
 }
@@ -27,9 +28,8 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.body) return res.status(400).json({ message: "Error: no body sent with request"})
 
-    const userRequestBody = req.body
-
-    const newUser = await userService.createUser(userRequestBody)
+    const validUser = zodValidation.validateUser.parse(req.body)
+    const newUser = await userService.createUser(validUser)
 
     return res.status(201).json({ newUser, message: "User successfully created" })
 }

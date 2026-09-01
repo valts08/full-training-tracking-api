@@ -8,9 +8,7 @@ import zodAuthValidation from "../helpers/validation/validateAuth.ts";
 import AppError from "../helpers/appErrorClass.ts";
 
 const registerUser = async (userObject: AuthUser) => {
-    const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
-
-    const { password, email, ...other } = validatedUserAuthObject
+    const { password, email, ...other } = userObject
 
     const emailExists = await prisma.user.findUnique({ 
         where: { email }
@@ -26,9 +24,7 @@ const registerUser = async (userObject: AuthUser) => {
 }
 
 const loginUser = async (userObject: AuthUser) => {
-    const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
-
-    const { email, password } = validatedUserAuthObject
+    const { email, password } = userObject
 
     const user = await prisma.user.findUnique({
         where: {

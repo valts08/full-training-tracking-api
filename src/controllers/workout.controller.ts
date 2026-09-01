@@ -1,5 +1,6 @@
 import type { Response, Request, NextFunction } from 'express';
 import workoutService from '../services/workout.service.ts';
+import zodValidation from '../helpers/validation/validateWorkout.ts'
 import AppError from '../helpers/appErrorClass.ts';
 
 const getWorkouts = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,8 +27,9 @@ const createWorkout = async (req: Request, res: Response, next: NextFunction) =>
     if (!req.user) throw new AppError('User not Authorized', 401)
         
     const workoutDataObject = { ...req.body, userId: req.user.id }
+    const validWorkout = zodValidation.validateWorkout.parse(workoutDataObject)
 
-    const workout = await workoutService.createWorkout(workoutDataObject)
+    const workout = await workoutService.createWorkout(validWorkout)
 
     return res.status(201).json({ workout, message: "Workout created successfully" })
 }
@@ -37,7 +39,8 @@ const updateWorkout = async (req: Request, res: Response, next: NextFunction) =>
     const workoutId = Number(req.params.id)
     const workoutDataObject = { ...req.body, userId: req.user.id}
     
-    const workout = await workoutService.updateWorkout(workoutDataObject, workoutId)
+    const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutDataObject)
+    const workout = await workoutService.updateWorkout(validWorkout, workoutId)
 
     return res.status(200).json({ workout, message: "Workout updated successfully" })
 }

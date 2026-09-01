@@ -29,10 +29,8 @@ const createUser = async (data: User) => {
     // different emails but same username will make this fail - will need to change this
     if (usernameExists) throw new AppError("User with that username already exists", 404)
 
-    const newUser = zodValidation.validateUser.parse(data)
-
     const user = await prisma.user.create({
-        data: { ...newUser }
+        data: { ...data }
     })
 
     return user
@@ -45,12 +43,10 @@ const updateUser = async (data: User, passedUserId: number) => {
     })
 
     if (!foundUser) throw new AppError("The user you wanted to edit was not found", 404)
-        
-    const validatedUser = zodValidation.validateUser.parse(data)
 
     const user = await prisma.user.update({
         where: { id: passedUserId },
-        data: { ...validatedUser }
+        data: { ...data }
     })
 
     return user

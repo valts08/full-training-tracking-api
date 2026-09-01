@@ -21,10 +21,8 @@ const getExercises = async (queryValues: queryParamType) => {
 
 const createExercise = async (data: CreateExercise) => {
 
-    const newExercise = zodValidation.exerciseValidation.parse(data)
-
     const exercise = await prisma.exercise.create({
-        data: toCreateExerciseInput(newExercise)
+        data: toCreateExerciseInput(data)
     })
 
     return exercise
@@ -43,12 +41,11 @@ const updateExercise = async (dataBody: UpdateExercise, passedExerciseId: number
     if (!exerciseToUpdate) throw new AppError(`Couldn't find exercise to update, make sure you're using a valid ID`, 404)
     if (exerciseToUpdate.userId !== dataBody.userId) throw new AppError(`Can't update this exercise, unauthorized user`, 403)
 
-    const validExercise = zodValidation.updateExerciseValidation.parse(dataBody)
     const exercise = await prisma.exercise.update({
         where: {
             id: passedExerciseId
         },
-        data: toUpdateExerciseInput(validExercise)
+        data: toUpdateExerciseInput(dataBody)
         
     })
     
