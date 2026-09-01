@@ -8,9 +8,7 @@ import zodAuthValidation from "../helpers/validation/validateAuth.ts";
 import AppError from "../helpers/appErrorClass.ts";
 
 const registerUser = async (userObject: AuthUser) => {
-    const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
-
-    const { password, email, ...other } = validatedUserAuthObject
+    const { password, email, ...other } = userObject
 
     const emailExists = await prisma.user.findUnique({ 
         where: { email }
@@ -26,9 +24,7 @@ const registerUser = async (userObject: AuthUser) => {
 }
 
 const loginUser = async (userObject: AuthUser) => {
-    const validatedUserAuthObject = zodAuthValidation.validateAuth.parse(userObject)
-
-    const { email, password } = validatedUserAuthObject
+    const { email, password } = userObject
 
     const user = await prisma.user.findUnique({
         where: {
@@ -45,9 +41,9 @@ const loginUser = async (userObject: AuthUser) => {
     
     const correctPassword = await bcrypt.compare(password, user.passwordHash)
 
-    if (!correctPassword) throw new AppError('Incorrect password, try again', 409)
+    if (!correctPassword) throw new AppError('Incorrect credentials', 409)
 
-    const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 120 })
+    const jwtToken = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, { expiresIn: 300 })
 
     return jwtToken
 }

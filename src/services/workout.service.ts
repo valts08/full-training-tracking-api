@@ -16,9 +16,9 @@ const getWorkout = async (userId: number) => {
     return workouts
 }
 
-const getWorkoutById = async (id: number) => {
+const getWorkoutById = async (id: number, userId: number) => {
     const workouts = await prisma.workout.findUnique({
-        where: { id },
+        where: { id, userId },
         include: {
             workoutExercises: {
                 select: { exercise: true }
@@ -30,9 +30,7 @@ const getWorkoutById = async (id: number) => {
 }
 
 const createWorkout = async (workoutData: CreateWorkoutType) => {
-    const validWorkout = zodValidation.validateWorkout.parse(workoutData)
-
-    const { exerciseIds, ...validWorkoutObject } = validWorkout
+    const { exerciseIds, ...validWorkoutObject } = workoutData
 
     const workout = await prisma.workout.create({
         data: {
@@ -50,17 +48,16 @@ const createWorkout = async (workoutData: CreateWorkoutType) => {
 
 const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) => {
     const { userId, ...workoutUpdateData } = workoutData
-    if (userId == undefined) throw new AppError('User not authorized', 401)
+    if (userId == undefined) throw new AppError("User not authorized", 401)
         
     const workout = await prisma.workout.findUnique({
         where: { id: workoutId }
     })
-    if (!workout) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
+    if (!workout) throw new AppError("Workout doesn't exist, check the passed ID", 404)
 
     if (workout.userId !== userId) throw new AppError("Can't update this workout, unauthorized user", 403)
     
-    const validWorkout = zodValidation.validateWorkoutUpdate.parse(workoutUpdateData)
-    const { exerciseIds, ...validWorkoutObject } = validWorkout
+    const { exerciseIds, ...validWorkoutObject } = workoutData
 
     const updateWorkout = await prisma.workout.update({
         where: { id: workoutId },
@@ -81,15 +78,21 @@ const updateWorkout = async (workoutData: UpdateWorkoutType, workoutId: number) 
     return updateWorkout
 }
 
-const deleteWorkout = async (workoutId: number) => {
+const deleteWorkout = async (workoutId: number, userId: number) => {
     const workoutExists = await prisma.workout.findUnique({
-        where: { id: workoutId }
+        where: { 
+            id: workoutId,
+            userId
+        }
     })
 
-    if (!workoutExists) throw new AppError(`Workout doesn't exist, check the passed ID`, 404)
+    if (!workoutExists) throw new AppError("Workout doesn't exist, check the passed ID", 404)
 
     const deletedWorkout = await prisma.workout.delete({
-        where: { id: workoutId }
+        where: { 
+            id: workoutId,
+            userId
+        }
     })
 
     return deletedWorkout
