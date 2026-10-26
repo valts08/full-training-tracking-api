@@ -1,9 +1,8 @@
-import zodValidation from '../helpers/validation/validateExercise.ts'
-import type { CreateExercise, UpdateExercise } from '../helpers/validation/validateExercise.ts'
-import type { queryParamType } from '../helpers/validation/queryParamValidation.ts'
-import AppError from '../helpers/appErrorClass.ts'
-import { toCreateExerciseInput, toUpdateExerciseInput } from '../helpers/mappers/exercise.mapper.ts'
-import { prisma } from '../../prisma/prismaClient.ts'
+import type { CreateExercise, UpdateExercise } from '../helpers/validation/validateExercise.js'
+import type { queryParamType } from '../helpers/validation/queryParamValidation.js'
+import AppError from '../helpers/appErrorClass.js'
+import { toCreateExerciseInput, toUpdateExerciseInput } from '../helpers/mappers/exercise.mapper.js'
+import { prisma } from '../../prisma/prismaClient.js'
 
 const getExercises = async (queryValues: queryParamType) => {
     const { page, limit, sortBy, order } = queryValues

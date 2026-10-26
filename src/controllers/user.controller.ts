@@ -1,7 +1,7 @@
 import type { Response, Request, NextFunction } from 'express'
-import userService from '../services/user.service.ts'
-import zodValidation from '../helpers/validation/validateUser.ts'
-import AppError from '../helpers/appErrorClass.ts'
+import userService from '../services/user.service.js'
+import zodValidation from '../helpers/validation/validateUser.js'
+import AppError from '../helpers/appErrorClass.js'
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) throw new AppError("Unauthorized user", 401)

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { prisma } from "../../prisma/prismaClient.ts";
-import AppError from "../helpers/appErrorClass.ts";
+import { prisma } from "../../prisma/prismaClient.js";
+import AppError from "../helpers/appErrorClass.js";
 
 export const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) throw new AppError("Unauthenticated user", 401)

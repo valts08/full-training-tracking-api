@@ -1,8 +1,7 @@
-import type { CreateWorkoutType, UpdateWorkoutType } from "../helpers/validation/validateWorkout.ts";
-import zodValidation from "../helpers/validation/validateWorkout.ts";
-import AppError from "../helpers/appErrorClass.ts";
-import { prisma } from "../../prisma/prismaClient.ts";
-import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.ts";
+import type { CreateWorkoutType, UpdateWorkoutType } from "../helpers/validation/validateWorkout.js";
+import AppError from "../helpers/appErrorClass.js";
+import { prisma } from "../../prisma/prismaClient.js";
+import { toWorkoutInput, toWorkoutUpdateInput } from "../helpers/mappers/workout.mapper.js";
 
 const getWorkout = async (userId: number) => {
     const workouts = await prisma.workout.findMany({

@@ -1,5 +1,5 @@
-import type { WorkoutUncheckedCreateInput, WorkoutUncheckedUpdateInput } from "../../generated/prisma/models.ts";
-import type { CreateWorkoutType, UpdateWorkoutType } from "../validation/validateWorkout.ts";
+import type { WorkoutUncheckedCreateInput, WorkoutUncheckedUpdateInput } from "../../generated/prisma/models.js";
+import type { CreateWorkoutType, UpdateWorkoutType } from "../validation/validateWorkout.js";
 
 type WorkoutBaseType = Omit<CreateWorkoutType, 'exerciseIds'>
 

@@ -1,7 +1,6 @@
-import zodValidation from '../helpers/validation/validateUser.ts'
-import type { User } from "../helpers/validation/validateUser.ts";
-import { prisma } from '../../prisma/prismaClient.ts';
-import AppError from '../helpers/appErrorClass.ts';
+import type { User } from "../helpers/validation/validateUser.js";
+import { prisma } from '../../prisma/prismaClient.js';
+import AppError from '../helpers/appErrorClass.js';
 
 const getUser = async (userId: number) => {
     const user = await prisma.user.findUnique({

@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express'
-import queryValidation from '../helpers/validation/queryParamValidation.ts'
-import zodValidation from '../helpers/validation/validateExercise.ts'
-import exerciseService from '../services/exercise.service.ts'
-import AppError from '../helpers/appErrorClass.ts'
+import queryValidation from '../helpers/validation/queryParamValidation.js'
+import zodValidation from '../helpers/validation/validateExercise.js'
+import exerciseService from '../services/exercise.service.js'
+import AppError from '../helpers/appErrorClass.js'
 
 const getExercises = async (req: Request, res: Response, next: NextFunction) => {
   

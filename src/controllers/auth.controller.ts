@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-import authService from "../services/auth.service.ts";
-import { emailValidator } from "../helpers/validation/controllerInputValidation.ts";
-import zodAuthValidation from '../helpers/validation/validateAuth.ts'
-import AppError from "../helpers/appErrorClass.ts";
+import authService from "../services/auth.service.js";
+import { emailValidator } from "../helpers/validation/controllerInputValidation.js";
+import zodAuthValidation from '../helpers/validation/validateAuth.js'
+import AppError from "../helpers/appErrorClass.js";
 
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email, ...other } = req.body

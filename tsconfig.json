@@ -3,8 +3,7 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    // "outDir": "./dist",
-
+    "outDir": "./dist",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
@@ -34,9 +33,8 @@
 
     // Recommended Options
     "strict": true,
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,

@@ -1,11 +1,10 @@
-import { config } from "../config/index.ts";
-import { prisma } from "../../prisma/prismaClient.ts";
+import { config } from "../config/index.js";
+import { prisma } from "../../prisma/prismaClient.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import userService from "./user.service.ts";
-import type { AuthUser } from "../helpers/validation/validateAuth.ts";
-import zodAuthValidation from "../helpers/validation/validateAuth.ts";
-import AppError from "../helpers/appErrorClass.ts";
+import userService from "./user.service.js";
+import type { AuthUser } from "../helpers/validation/validateAuth.js";
+import AppError from "../helpers/appErrorClass.js";
 
 const registerUser = async (userObject: AuthUser) => {
     const { password, email, ...other } = userObject
