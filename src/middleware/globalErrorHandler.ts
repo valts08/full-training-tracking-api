@@ -9,7 +9,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     let error;
 
     if (err instanceof AppError) {
-        return res.status(err.statusCode).json({ error: err.message })
+        res.status(err.statusCode).json({ error: err.message })
     }
 
     if (err instanceof ZodError) {
@@ -18,7 +18,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
             message: i.message
         }))
 
-        return res.status(400).json({ error })
+        res.status(400).json({ error })
     }
 
     if (err instanceof PrismaClientKnownRequestError) {
@@ -28,7 +28,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
             meta: err.meta
         }
 
-        return res.status(400).json({ error })
+        res.status(400).json({ error })
     }
 
     if (err instanceof PrismaClientInitializationError) {
@@ -37,7 +37,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
             message: err.message
         }
 
-        return res.status(400).json({ error })
+        res.status(400).json({ error })
     }
 
     if (err instanceof PrismaClientValidationError) {
@@ -46,10 +46,12 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
             message: err.message
         }
         
-        return res.status(400).json({ error })
+        res.status(400).json({ error })
     }
 
-    return res.status(400).json({ error: err, random: '123' })
+    return console.error(err)
+
+    // return res.status(400).json({ error: "something failed, check it out" })
 }
     
 export default errorHandler

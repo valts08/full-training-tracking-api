@@ -16,9 +16,16 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
 }
 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-    const validAuthObject = zodAuthValidation.validateAuth.parse(req.body)
+    let validAuthObject;
+    let jwtToken;
 
-    const jwtToken = await authService.loginUser(validAuthObject)
+    try {
+        validAuthObject = zodAuthValidation.validateAuth.parse(req.body)
+        jwtToken = await authService.loginUser(validAuthObject)
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
 
     return res.status(200).json({ token: jwtToken, message: "User successfully logged in" })
 }
