@@ -13,11 +13,12 @@
   "license": "ISC",
   "author": "Valts Pilans",
   "type": "module",
-  "main": "src/app.ts",
+  "main": "src/app.js",
   "scripts": {
-    "start": "tsx src/app.ts",
-    "dev": "nodemon --exec tsx src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/src/app.js",
+    "dev": "nodemon --exec tsx src/app.js",
+    "build": "prisma generate && tsc"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

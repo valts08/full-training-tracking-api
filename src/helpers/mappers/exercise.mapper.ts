@@ -1,6 +1,6 @@
-import type { ExerciseUncheckedCreateInput, ExerciseUncheckedUpdateInput } from "../../generated/prisma/models.ts";
-import AppError from "../appErrorClass.ts";
-import type { CreateExercise, UpdateExercise } from "../validation/validateExercise.ts";
+import type { ExerciseUncheckedCreateInput, ExerciseUncheckedUpdateInput } from "../../generated/prisma/models.js";
+import AppError from "../appErrorClass.js";
+import type { CreateExercise, UpdateExercise } from "../validation/validateExercise.js";
 
 export const toCreateExerciseInput = (exercise: CreateExercise) : ExerciseUncheckedCreateInput => {
     const exercises = {
@@ -37,7 +37,7 @@ export const toCreateExerciseInput = (exercise: CreateExercise) : ExerciseUnchec
             return { ...exercises, repRange: exercise.repRange } as ExerciseUncheckedCreateInput
 
         default:
-            throw new AppError(`Unknown exercise category: ${exercise.category}`, 400)
+            throw new AppError(`Unknown exercise category: ${(exercise as { category: string }).category}`, 400)
     }
 }
 
@@ -76,6 +76,6 @@ export const toUpdateExerciseInput = (exercise: UpdateExercise) : ExerciseUnchec
             return { ...exercises, repRange: exercise.repRange } as ExerciseUncheckedUpdateInput
 
         default:
-            throw new AppError(`Unknown exercise category: ${exercise.category}`, 400)
+            throw new AppError(`Unknown exercise category: ${(exercise as { category: string }).category}`, 400)
     }
 }

@@ -1,7 +1,7 @@
 import type { Response, Request, NextFunction } from 'express';
-import workoutService from '../services/workout.service.ts';
-import zodValidation from '../helpers/validation/validateWorkout.ts'
-import AppError from '../helpers/appErrorClass.ts';
+import workoutService from '../services/workout.service.js';
+import zodValidation from '../helpers/validation/validateWorkout.js'
+import AppError from '../helpers/appErrorClass.js';
 
 const getWorkouts = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) throw new AppError('Unauthorized user', 401)

@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { authenticateRequest } from '../middleware/authentication.ts'
-import { writeLimiter, readLimiter } from '../middleware/rateLimiting.ts'
-import exerciseController from '../controllers/exercise.controller.ts'
+import { authenticateRequest } from '../middleware/authentication.js'
+import { writeLimiter, readLimiter } from '../middleware/rateLimiting.js'
+import exerciseController from '../controllers/exercise.controller.js'
 
 const router = Router()
 

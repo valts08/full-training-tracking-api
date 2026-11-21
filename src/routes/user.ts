@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { authenticateRequest } from '../middleware/authentication.ts'
-import { verifyAdmin } from '../middleware/verifyAdmin.ts'
-import { writeLimiter, readLimiter } from '../middleware/rateLimiting.ts'
-import userController from '../controllers/user.controller.ts'
+import { authenticateRequest } from '../middleware/authentication.js'
+import { verifyAdmin } from '../middleware/verifyAdmin.js'
+import { writeLimiter, readLimiter } from '../middleware/rateLimiting.js'
+import userController from '../controllers/user.controller.js'
 
 const router = Router()
 

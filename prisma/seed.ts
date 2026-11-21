@@ -1,6 +1,6 @@
-import '../src/config/index.ts'
-import seedData from '../src/helpers/seedData.ts'
-import { prisma } from "./prismaClient.ts";
+import '../src/config/index.js'
+import seedData from '../src/helpers/seedData.js'
+import { prisma } from "./prismaClient.js";
 
 const seedDatabase = async () => {
     await prisma.workoutExercise.deleteMany()
